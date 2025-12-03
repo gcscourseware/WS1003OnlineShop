@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LU10</title>
+    <style>
+        /* CSS Styling - Theme for Clarity and Data (Scientific, Organized) */
+        :root {
+            --primary-color: #00bcd4; /* Cyan for clarity and data visualization */
+            --secondary-color: #ff5722; /* Deep orange for actionable insights */
+            --text-color: #333;
+            --bg-color: #e8f5e9; /* Very light green for freshness/growth */
+            --card-bg: #fff;
+            --radius: 8px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0 0 5px 0;
+            font-size: 2.2em;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        /* Navigation Styling */
+        #lesson-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px auto;
+        }
+
+        .nav-btn {
+            background: #e0f7fa;
+            color: var(--text-color);
+            border: 1px solid #b2ebf2;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            border-radius: var(--radius);
+            font-weight: 600;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Section Styling */
+        .content-section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+        }
+
+        .content-section.active {
+            display: block; /* Shown when active */
+        }
+
+        /* Toggle/Accordion Styling */
+        .toggle-container {
+            border: 1px solid #dee2e6;
+            border-radius: var(--radius);
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .toggle-header {
+            width: 100%;
+            text-align: left;
+            background: #e0f2f1; /* Light cyan */
+            color: var(--text-color);
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-container .toggle-header:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-header:hover {
+            background: #b2dfdb;
+        }
+
+        .toggle-header.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .toggle-header span.icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .toggle-header.active span.icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-body {
+            background: #fff;
+            padding: 0 15px;
+            margin: 0;
+            overflow: hidden;
+            max-height: 0; /* Hidden by default for smooth transition */
+            transition: max-height 0.4s ease-in-out;
+        }
+        
+        .toggle-body p, .toggle-body ul, .toggle-body ol {
+            padding-top: 10px;
+        }
+
+        .toggle-body.active {
+            padding: 15px;
+        }
+
+        /* Highlight box for formulas/key actions */
+        .highlight-box {
+            background: #fff3e0; /* Light orange from secondary color */
+            border: 1px solid var(--secondary-color);
+            border-left: 5px solid var(--secondary-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        /* Quiz Activity Styling */
+        #quiz-form {
+            background: #f1f8e9; 
+            padding: 20px;
+            border: 1px solid #c8e6c9;
+            border-radius: var(--radius);
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e1f5fe;
+            background: #fff;
+            border-radius: 5px;
+        }
+
+        .quiz-question p {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .quiz-option {
+            margin: 8px 0;
+        }
+        .quiz-option label {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        #quiz-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        button#submit-quiz {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(255, 87, 34, 0.4);
+        }
+
+        button#submit-quiz:hover {
+            background-color: #e64a19;
+        }
+        button#submit-quiz:active {
+            transform: translateY(1px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            main {
+                padding: 0 10px;
+            }
+            #lesson-nav {
+                flex-direction: column;
+            }
+            .nav-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LU10:Analytics and Performance Tracking</h1>
+        <p>Turning data into profit with key metrics and actionable insights.</p>
+    </header>
+
+    <main>
+        <nav id="lesson-nav">
+            <button class="nav-btn active" data-target="platform">1. Platform Analytics</button>
+            <button class="nav-btn" data-target="conversion">2. Conversion Rates</button>
+            <button class="nav-btn" data-target="data-driven">3. Data-Driven Improvements</button>
+            <button class="nav-btn" data-target="activity">Activity: Quiz</button>
+        </nav>
+
+        <!-- Section 1: Understanding platform analytics (Shopify Dashboard, Shopee Insights, etc.) -->
+        <section id="platform" class="content-section active">
+            <h2>💻 1. Understanding Platform Analytics</h2>
+            <p>Every e-commerce platform provides a built-in dashboard to monitor essential Key Performance Indicators (KPIs).</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="key-metrics">Essential Platform Metrics <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="key-metrics">
+                    <p>Focus on these core numbers in any platform dashboard:</p>
+                    <ul>
+                        <li><strong>Traffic/Sessions:</strong> How many times customers visited your store.</li>
+                        <li><strong>Average Order Value (AOV):</strong> The average amount spent per transaction. Helps you evaluate upselling/cross-selling success.</li>
+                        <li><strong>Returning Customer Rate:</strong> The percentage of orders placed by customers who have previously bought from you. A key indicator of loyalty.</li>
+                        <li><strong>Revenue by Channel:</strong> Which platform (your website, Instagram Shop, Shopee) drives the most sales.</li>
+                    </ul>
+                    
+                </div>
+
+                <button class="toggle-header" data-toggle="social-metrics">Social Commerce Specific Metrics <span class="icon">▼</span></button>
+                <div class="toggle-body" id="social-metrics">
+                    <p>When selling directly on social media, track the following beyond standard platform metrics:</p>
+                    <ol>
+                        <li><strong>Click-Through Rate (CTR):</strong> The percentage of people who clicked your product link after viewing your ad/post.</li>
+                        <li><strong>Engagement Rate:</strong> Total likes, comments, and shares divided by total impressions. High engagement often precedes high sales.</li>
+                        <li><strong>Cost Per Acquisition (CPA):</strong> How much money it costs you to acquire one paying customer through an ad campaign.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Measuring sales conversion rates -->
+        <section id="conversion" class="content-section">
+            <h2>🎯 2. Measuring Sales Conversion Rates</h2>
+            <p>Conversion Rate is the most important metric for determining how effective your website or social shop is at turning visitors into buyers. [Image of sales funnel conversion stages]</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="cr-formula">The Conversion Rate Formula <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="cr-formula">
+                    <div class="highlight-box">
+                        $$\text{Conversion Rate} = \frac{\text{Number of Orders}}{\text{Number of Sessions}} \times 100$$
+                    </div>
+                    <p>A good e-commerce conversion rate is typically between 1% and 3%, but this varies widely by industry and traffic source. Social commerce traffic often converts lower than search traffic.</p>
+                </div>
+
+                <button class="toggle-header" data-toggle="funnel-analysis">Analyzing the Purchase Funnel <span class="icon">▼</span></button>
+                <div class="toggle-body" id="funnel-analysis">
+                    <p>Instead of just the final sales rate, look at each step:</p>
+                    <ul>
+                        <li><strong>Visitor to Cart:</strong> The drop-off rate here indicates issues with product presentation (images, descriptions) or pricing.</li>
+                        <li><strong>Cart to Checkout:</strong> Low conversion here indicates problems with shipping costs, confusing site navigation, or lack of trust signals.</li>
+                        <li><strong>Checkout to Purchase (Payment):</strong> High drop-off here points to issues with accepted payment methods or unexpected fees/taxes.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Making data-driven improvements -->
+        <section id="data-driven" class="content-section">
+            <h2>💡 3. Making Data-Driven Improvements</h2>
+            <p>Data should lead directly to testing and optimization, not just observation.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="optimization">Optimization Strategies <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="optimization">
+                    <p>Match the metric to the improvement action:</p>
+                    <ul>
+                        <li><strong>Problem: Low AOV?</strong> <br> **Action:** Introduce bundles, offer free shipping above a higher threshold, or implement a "Frequently Bought Together" section.</li>
+                        <li><strong>Problem: Low Cart-to-Checkout?</strong> <br> **Action:** Add trust badges (payment logos, security seals) near the checkout button or simplify the checkout form to a single page.</li>
+                        <li><strong>Problem: High CPA (Cost Per Acquisition)?</strong> <br> **Action:** Refine ad targeting to a more specific audience or improve the landing page experience to increase its quality score.</li>
+                    </ul>
+                </div>
+
+                <button class="toggle-header" data-toggle="ab-testing">The A/B Testing Mindset <span class="icon">▼</span></button>
+                <div class="toggle-body" id="ab-testing">
+                    <p>Never change everything at once. Test one element at a time (e.g., button color, product description, image gallery layout) to isolate the impact.</p>
+                    <div class="highlight-box">
+                        <strong>Hypothesis Structure:</strong> "If I change [ELEMENT], then [METRIC] will improve by [AMOUNT] because [REASON]." (e.g., "If I change the Buy button color to orange, conversion will improve by 10% because orange draws more attention.")
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Interactive Activity (Quiz) -->
+        <section id="activity" class="content-section">
+            <h2>🧠 Interactive Quiz: Data Diagnostics</h2>
+            <p>Test your ability to link data problems with actionable solutions.</p>
+            <form id="quiz-form">
+                <!-- Question 1: Platform Metrics -->
+                <div class="quiz-question">
+                    <p>1. Which metric is the best indicator of customer loyalty and long-term brand success?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="A" id="q1a"><label for="q1a"> A. Average Order Value (AOV).</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="B" id="q1b"><label for="q1b"> B. Sessions/Traffic.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="C" id="q1c"><label for="q1c"> C. Returning Customer Rate.</label>
+                    </div>
+                </div>
+
+                <!-- Question 2: Conversion -->
+                <div class="quiz-question">
+                    <p>2. You notice a high drop-off rate between "Cart" and "Checkout." What is the most likely cause?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="A" id="q2a"><label for="q2a"> A. Poor product photos/descriptions.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="B" id="q2b"><label for="q2b"> B. Unexpectedly high shipping costs or hidden fees.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="C" id="q2c"><label for="q2c"> C. Low traffic volume overall.</label>
+                    </div>
+                </div>
+
+                <!-- Question 3: Data-Driven Improvements -->
+                <div class="quiz-question">
+                    <p>3. Your goal is to increase AOV. Which data-driven action should you implement?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="A" id="q3a"><label for="q3a"> A. Redesign the homepage.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="B" id="q3b"><label for="q3b"> B. Offer a 10% discount on all purchases.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="C" id="q3c"><label for="q3c"> C. Create product bundles and cross-sell recommendations.</label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-quiz">Submit Answers</button>
+            </form>
+            <div id="quiz-result"></div>
+        </section>
+    </main>
+
+    <script>
+        // JavaScript for Interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Section Navigation Logic (Tabs) ---
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+
+                    // Deactivate all buttons and content sections
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    contentSections.forEach(section => section.classList.remove('active'));
+
+                    // Activate the clicked button
+                    button.classList.add('active');
+
+                    // Show the corresponding content section
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        // Scroll smoothly to the content area
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // --- 2. Toggle/Accordion Logic ---
+            const toggleHeaders = document.querySelectorAll('.toggle-header');
+
+            toggleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const bodyId = header.getAttribute('data-toggle');
+                    const targetBody = document.getElementById(bodyId);
+
+                    if (targetBody) {
+                        const isCurrentlyActive = header.classList.contains('active');
+                        const container = header.closest('.toggle-container');
+
+                        // Close all toggles in the same container
+                        container.querySelectorAll('.toggle-header').forEach(h => h.classList.remove('active'));
+                        container.querySelectorAll('.toggle-body').forEach(b => {
+                            b.classList.remove('active');
+                            b.style.maxHeight = null;
+                            b.style.padding = '0 15px'; // Reset padding when closing
+                        });
+
+                        // If it was not active, open it
+                        if (!isCurrentlyActive) {
+                            header.classList.add('active');
+                            targetBody.classList.add('active');
+                            targetBody.style.padding = '15px'; // Set padding when opening
+                            // Set max-height for CSS transition
+                            targetBody.style.maxHeight = targetBody.scrollHeight + "px";
+                        }
+                    }
+                });
+            });
+
+            // Initialize: Set the initial max-height for the first active toggle body
+            const initialActiveBody = document.querySelector('.toggle-body.active');
+            if (initialActiveBody) {
+                initialActiveBody.style.maxHeight = initialActiveBody.scrollHeight + "px";
+                initialActiveBody.style.padding = '15px';
+            }
+            
+            // --- 3. Quiz Activity Logic ---
+            const quizForm = document.getElementById('quiz-form');
+            const quizResult = document.getElementById('quiz-result');
+            const correctAnswers = {
+                q1: 'C', // Returning Customer Rate measures loyalty
+                q2: 'B', // Cart-to-Checkout drop-off is usually due to unexpected costs or long forms
+                q3: 'C'  // Bundles and cross-sells directly increase the average transaction amount (AOV)
+            };
+
+            quizForm.addEventListener('submit', function(event) {
+                event.preventDefault(); 
+                
+                let score = 0;
+                let totalQuestions = 0;
+                let feedbackHTML = '<p><strong>Quiz Feedback:</strong></p><ul>';
+
+                for (const q in correctAnswers) {
+                    totalQuestions++;
+                    // Find the selected radio button value
+                    const selectedOption = quizForm.elements[q].value;
+                    const isCorrect = selectedOption === correctAnswers[q];
+                    const questionNumber = q.substring(1);
+                    
+                    // Highlight the question box based on the result
+                    const questionBox = document.querySelector(`.quiz-question:nth-child(${questionNumber})`);
+                    
+                    if (isCorrect) {
+                        score++;
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:#28a745;">Correct!</span></li>`;
+                        questionBox.style.borderColor = '#c3e6cb';
+                        questionBox.style.backgroundColor = '#d4edda20';
+                    } else {
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:#dc3545;">Incorrect.</span> Review the corresponding lesson section.</li>`;
+                        questionBox.style.borderColor = '#f5c6cb';
+                        questionBox.style.backgroundColor = '#f8d7da20';
+                    }
+                }
+                
+                const percentage = (score / totalQuestions) * 100;
+                let introMessage = '';
+                
+                if (score === totalQuestions) {
+                    introMessage = '🎯 Perfect Score! You can analyze data and create an action plan.';
+                } else if (score > totalQuestions / 2) {
+                    introMessage = '👍 Very strong understanding of analytics fundamentals.';
+                } else {
+                    introMessage = '🧐 Review the key funnel stages and how different actions impact different metrics.';
+                }
+
+                quizResult.innerHTML = `
+                    <p>${introMessage}</p>
+                    <p>You scored <strong>${score} out of ${totalQuestions}</strong> (${percentage.toFixed(0)}%).</p>
+                    ${feedbackHTML}
+                    </ul>
+                `;
+
+                // Apply overall result styling
+                quizResult.style.display = 'block';
+                quizResult.className = (score >= totalQuestions / 2) ? 'correct' : 'incorrect';
+            });
+        });
+    </script>
+</body>
+</html>

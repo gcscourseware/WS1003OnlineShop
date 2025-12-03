@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LU03</title>
+    <style>
+        /* CSS Styling */
+        :root {
+            --primary-color: #007bff; /* Blue */
+            --secondary-color: #28a745; /* Green Accent */
+            --text-color: #343a40;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0 0 5px 0;
+            font-size: 2.2em;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        /* Navigation Styling */
+        #lesson-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px auto;
+        }
+
+        .nav-btn {
+            background: #e9ecef;
+            color: var(--text-color);
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Content Section Styling */
+        .content-section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+        }
+
+        .content-section.active {
+            display: block; /* Shown when active */
+        }
+
+        /* Toggle/Accordion Styling */
+        .toggle-header {
+            width: 100%;
+            text-align: left;
+            background: #f0f4f8;
+            color: var(--text-color);
+            border: none;
+            padding: 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background 0.2s;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-header:hover {
+            background: #e3e8ed;
+        }
+
+        .toggle-header.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .toggle-header span.icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .toggle-header.active span.icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-body {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-top: none;
+            padding: 15px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            max-height: 0; /* Hidden by default for smooth transition */
+            transition: max-height 0.4s ease-in-out;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .toggle-body.active {
+            border-top: 1px solid var(--primary-color);
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #0056b3;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Quiz Activity Styling */
+        #quiz-form {
+            background: #e6f7ff;
+            padding: 20px;
+            border: 1px solid #b3e0ff;
+            border-radius: 8px;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #cce5ff;
+            background: #fff;
+            border-radius: 5px;
+        }
+
+        .quiz-question p {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .quiz-option {
+            margin: 5px 0;
+        }
+
+        #quiz-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        button#submit-quiz {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.2s;
+        }
+
+        button#submit-quiz:hover {
+            background-color: #1e7e34;
+        }
+
+        @media (max-width: 768px) {
+            #lesson-nav {
+                flex-direction: column;
+            }
+            .nav-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LU03:Choosing the Right Platform for Your Business</h1>
+        <p>Mastering the fundamentals of launching an online business.</p>
+    </header>
+
+    <main>
+        <nav id="lesson-nav">
+            <button class="nav-btn active" data-target="factors">1. Planning Factors</button>
+            <button class="nav-btn" data-target="costs">2. Cost Structures</button>
+            <button class="nav-btn" data-target="comparison">3. Platform Comparison</button>
+            <button class="nav-btn" data-target="activity">Activity: Quiz</button>
+        </nav>
+
+        <section id="factors" class="content-section active">
+            <h2>🎯 1. Key Planning Factors</h2>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="audience">Target Audience <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="audience">
+                    <p><strong>Definition:</strong> The specific group of consumers most likely to buy your product. Failing to define this leads to wasted marketing and poor product fit.</p>
+                    <ul>
+                        <li> Demographics: Age, income, location, education.</li>
+                        <li> Psychographics: Hobbies, values, lifestyle, purchasing behavior.</li>
+                    </ul>
+                </div>
+
+                <button class="toggle-header" data-toggle="model">Business Model <span class="icon">▼</span></button>
+                <div class="toggle-body" id="model">
+                    <p><strong>Key Models:</strong> Defines how you create, deliver, and capture value.</p>
+                    <ul>
+                        <li>B2C (Business-to-Consumer): Selling directly to the end-user (e.g., selling a t-shirt).</li>
+                        <li>D2C (Direct-to-Consumer): Manufacturer/Brand sells directly to consumers, bypassing retailers (e.g., Warby Parker).</li>
+                        <li>B2B (Business-to-Business):Selling to other companies (e.g., selling industrial equipment).</li>
+                        <li>Dropshipping:Selling products without holding inventory.</li>
+                    </ul>
+                </div>
+
+                <button class="toggle-header" data-toggle="product">Product Type <span class="icon">▼</span></button>
+                <div class="toggle-body" id="product">
+                    <p><strong>Impact:</strong> Determines logistics, payment requirements, and platform features needed.</p>
+                    <ul>
+                        <li>Physical Goods: Requires inventory management, shipping, and fulfillment tools.</li>
+                        <li>Digital Products: No shipping, requires secure downloads/streaming tools (e.g., e-books, software).</li>
+                        <li>Services: Requires booking/scheduling tools and potentially recurring billing.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="costs" class="content-section">
+            <h2> 2. Cost Structures</h2>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="subscription">Subscription Fees (Fixed) <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="subscription">
+                    <p>The fixed monthly cost for using a hosted platform (like Shopify or BigCommerce). These costs are predictable and often scale up for features like advanced reporting or lower transaction fees.</p>
+                </div>
+
+                <button class="toggle-header" data-toggle="commissions">Commissions / Transaction Fees (Variable) <span class="icon">▼</span></button>
+                <div class="toggle-body" id="commissions">
+                    <p>A percentage of each sale taken by the payment processor (e.g., Stripe, PayPal) and/or the e-commerce platform itself. Crucial for calculating profit margins.</p>
+                    <p><em>Example:</em> A platform might charge 2.9% + 30¢ per transaction.</p>
+                </div>
+
+                <button class="toggle-header" data-toggle="hidden-costs">Other Overhead & Hidden Costs <span class="icon">▼</span></button>
+                <div class="toggle-body" id="hidden-costs">
+                    <p>Don't forget Domain Name, Hosting (for self-hosted platforms like WooCommerce), Premium Apps/Plugins, Email Marketing Services, and Advertising Spend.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparison" class="content-section">
+            <h2>⚖️ 3. Platform Comparison</h2>
+            <p>Choosing between hosted (e.g., Shopify) and self-hosted (e.g., WooCommerce) options involves balancing these three factors:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Hosted Platform (e.g., Shopify)</th>
+                        <th>Self-Hosted (e.g., WooCommerce)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ease of Use</td>
+                        <td>High:Quick setup, drag-and-drop, low technical skill required.</td>
+                        <td>Low-Moderate: Requires managing hosting, updates, and more technical setup.</td>
+                    </tr>
+                    <tr>
+                        <td>Scalability</td>
+                        <td>High: Excellent for fast growth; platform handles all server resources.</td>
+                        <td>Unlimited: Depends entirely on your chosen web host and server resources.</td>
+                    </tr>
+                    <tr>
+                    <td>Customization</td>
+                    <td>Moderate:Limited by platform's core code and API access. Good for standard stores.</td>
+                    <td>Near-Infinite: Full control over the underlying code. Best for unique or complex features.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="activity" class="content-section">
+            <h2>🧠 Interactive Quiz: Apply Your Knowledge</h2>
+            <p>Test your understanding of the e-commerce concepts covered in this lesson.</p>
+            <form id="quiz-form">
+                <div class="quiz-question">
+                    <p>1. A company selling industrial components to factories is using which business model?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="A" id="q1a"><label for="q1a"> A. B2C</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="B" id="q1b"><label for="q1b"> B. D2C</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="C" id="q1c"><label for="q1c"> C. B2B</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <p>2. Which e-commerce cost is variable and scales directly with your sales volume?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="A" id="q2a"><label for="q2a"> A. Monthly Platform Subscription</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="B" id="q2b"><label for="q2b"> B. Transaction Fees/Commissions</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="C" id="q2c"><label for="q2c"> C. Domain Name Registration</label>
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <p>3. If you require near-infinite customization and want full control over your server environment, you should prioritize a platform with high:</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="A" id="q3a"><label for="q3a"> A. Ease of Use</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="B" id="q3b"><label for="q3b"> B. Scalability</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="C" id="q3c"><label for="q3c"> C. Customization</label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-quiz">Submit Answers</button>
+            </form>
+            <div id="quiz-result"></div>
+        </section>
+    </main>
+
+    <script>
+        // JavaScript for Interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Section Navigation Logic (Tabs) ---
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+
+                    // Deactivate all buttons and content sections
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    contentSections.forEach(section => section.classList.remove('active'));
+
+                    // Activate the clicked button
+                    button.classList.add('active');
+
+                    // Show the corresponding content section
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        // Scroll to the top of the main content area
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // --- 2. Toggle/Accordion Logic ---
+            const toggleHeaders = document.querySelectorAll('.toggle-header');
+
+            toggleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const bodyId = header.getAttribute('data-toggle');
+                    const targetBody = document.getElementById(bodyId);
+
+                    if (targetBody) {
+                        const isCurrentlyActive = header.classList.contains('active');
+                        const container = header.closest('.toggle-container');
+
+                        // Close all toggles in the same container
+                        container.querySelectorAll('.toggle-header').forEach(h => h.classList.remove('active'));
+                        container.querySelectorAll('.toggle-body').forEach(b => {
+                            b.classList.remove('active');
+                            b.style.maxHeight = null;
+                        });
+
+                        // If it was not active, open it
+                        if (!isCurrentlyActive) {
+                            header.classList.add('active');
+                            targetBody.classList.add('active');
+                            // Set max-height for CSS transition
+                            targetBody.style.maxHeight = targetBody.scrollHeight + "px";
+                        }
+                    }
+                });
+            });
+
+            // Initialize: Set the initial max-height for the first active toggle body
+            const initialActiveBody = document.querySelector('.toggle-body.active');
+            if (initialActiveBody) {
+                initialActiveBody.style.maxHeight = initialActiveBody.scrollHeight + "px";
+            }
+            
+            // --- 3. Quiz Activity Logic ---
+            const quizForm = document.getElementById('quiz-form');
+            const quizResult = document.getElementById('quiz-result');
+            const correctAnswers = {
+                q1: 'C', // B2B
+                q2: 'B', // Transaction Fees/Commissions
+                q3: 'C'  // Customization
+            };
+
+            quizForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Stop default form submission
+                
+                let score = 0;
+                let totalQuestions = 0;
+                let feedbackHTML = '<p><strong>Quiz Results:</strong></p><ul>';
+
+                for (const q in correctAnswers) {
+                    totalQuestions++;
+                    const selectedOption = quizForm.elements[q].value;
+                    const isCorrect = selectedOption === correctAnswers[q];
+                    
+                    if (isCorrect) {
+                        score++;
+                        feedbackHTML += `<li>Question ${q.substring(1)}: <span style="color: var(--secondary-color);">Correct!</span></li>`;
+                    } else {
+                        feedbackHTML += `<li>Question ${q.substring(1)}: <span style="color:#dc3545;">Incorrect.</span> The correct answer was ${correctAnswers[q]}.</li>`;
+                    }
+                }
+                
+                const percentage = (score / totalQuestions) * 100;
+                
+                quizResult.innerHTML = `
+                    <p>You scored <strong>${score} out of ${totalQuestions}</strong> (${percentage.toFixed(0)}%).</p>
+                    ${feedbackHTML}
+                    </ul>
+                `;
+
+                // Apply result styling
+                quizResult.style.display = 'block';
+                if (score >= totalQuestions) {
+                    quizResult.className = 'correct';
+                    quizResult.innerHTML = `🎉 Perfect Score! ${quizResult.innerHTML}`;
+                } else if (score >= totalQuestions / 2) {
+                    quizResult.className = 'correct';
+                } else {
+                    quizResult.className = 'incorrect';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

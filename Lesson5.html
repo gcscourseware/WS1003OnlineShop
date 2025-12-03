@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LU05</title>
+    <style>
+        /* CSS Styling - Retained for aesthetic consistency */
+        :root {
+            --primary-color: #9c27b0; /* Purple for Product Focus */
+            --secondary-color: #ff9800; /* Orange Accent */
+            --text-color: #343a40;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+            --radius: 8px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0 0 5px 0;
+            font-size: 2.2em;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        /* Navigation Styling */
+        #lesson-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px auto;
+        }
+
+        .nav-btn {
+            background: #e9ecef;
+            color: var(--text-color);
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            border-radius: var(--radius);
+            font-weight: 600;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Section Styling */
+        .content-section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+        }
+
+        .content-section.active {
+            display: block; /* Shown when active */
+        }
+
+        /* Toggle/Accordion Styling */
+        .toggle-container {
+            border: 1px solid #dee2e6;
+            border-radius: var(--radius);
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .toggle-header {
+            width: 100%;
+            text-align: left;
+            background: #f0f4f8;
+            color: var(--text-color);
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-container .toggle-header:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-header:hover {
+            background: #e3e8ed;
+        }
+
+        .toggle-header.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .toggle-header span.icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .toggle-header.active span.icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-body {
+            background: #fff;
+            padding: 0 15px;
+            margin: 0;
+            overflow: hidden;
+            max-height: 0; /* Hidden by default for smooth transition */
+            transition: max-height 0.4s ease-in-out;
+        }
+        
+        .toggle-body p, .toggle-body ul, .toggle-body ol {
+            padding-top: 10px;
+        }
+
+        .toggle-body.active {
+            padding: 15px;
+        }
+
+        /* Highlight box for key steps */
+        .highlight-box {
+            background: #ffecb3; /* Light orange/yellow */
+            border: 1px solid var(--secondary-color);
+            border-left: 5px solid var(--secondary-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        /* Quiz Activity Styling */
+        #quiz-form {
+            background: #f3e5f5; /* Light purple tint */
+            padding: 20px;
+            border: 1px solid #ce93d8;
+            border-radius: var(--radius);
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e1bee7;
+            background: #fff;
+            border-radius: 5px;
+        }
+
+        .quiz-question p {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .quiz-option {
+            margin: 8px 0;
+        }
+        .quiz-option label {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        #quiz-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        button#submit-quiz {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(255, 152, 0, 0.3);
+        }
+
+        button#submit-quiz:hover {
+            background-color: #e68900;
+        }
+        button#submit-quiz:active {
+            transform: translateY(1px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            main {
+                padding: 0 10px;
+            }
+            #lesson-nav {
+                flex-direction: column;
+            }
+            .nav-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LU05:Product Listing and Inventory Management</h1>
+        <p>Turning product data into compelling listings and efficient operations.</p>
+    </header>
+
+    <main>
+        <nav id="lesson-nav">
+            <button class="nav-btn active" data-target="descriptions">1. Product Descriptions</button>
+            <button class="nav-btn" data-target="listing">2. Images and Pricing</button>
+            <button class="nav-btn" data-target="inventory">3. Inventory Management</button>
+            <button class="nav-btn" data-target="activity">Activity: Quiz</button>
+        </nav>
+
+        <!-- Section 1: Writing Effective Product Descriptions -->
+        <section id="descriptions" class="content-section active">
+            <h2>✍️ 1. Writing Effective Product Descriptions</h2>
+            <p>A great product description sells the *experience*, not just the features. It should answer the customer's question: "What's in it for me?"</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="seo-focus">Focus on SEO and Keywords <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="seo-focus">
+                    <p>Use language that customers actually search for. Place primary keywords (e.g., "leather wallet for men," not just "wallet") in the title, the first paragraph, and image file names.</p>
+                    <div class="highlight-box">
+                        <strong>Rule:</strong> The product title and the H1 tag are the most important spots for your primary keyword.
+                    </div>
+                </div>
+
+                <button class="toggle-header" data-toggle="benefit-driven">Sell the Benefits, Not Features <span class="icon">▼</span></button>
+                <div class="toggle-body" id="benefit-driven">
+                    <p><strong>Feature:</strong> This shirt is made of 100% organic cotton.<br>
+                    <strong>Benefit:</strong> You'll enjoy all-day comfort and a breathable fit, knowing your shirt is sustainably made.</p>
+                    <p>Always translate a feature into a tangible emotional or practical gain for the customer.</p>
+                </div>
+
+                <button class="toggle-header" data-toggle="format-readability">Formatting for Readability <span class="icon">▼</span></button>
+                <div class="toggle-body" id="format-readability">
+                    <p>Online customers scan, they don't read. Use:</p>
+                    <ol>
+                        <li>Short, punchy paragraphs.</li>
+                        <li>Bulleted lists for technical specs or key features.</li>
+                        <li>Bold text to highlight critical information (e.g., size, material).</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Uploading Product Images and Setting Prices -->
+        <section id="listing" class="content-section">
+            <h2>📸 2. Images, Media, and Pricing Strategy</h2>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="image-best-practices">Image Best Practices <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="image-best-practices">
+                    <p>Images are the first thing customers see. They must be high-quality and varied. </p>
+                    <ul>
+                        <li>**Product Shots:** Clear, white-background image of the item.</li>
+                        <li>**Lifestyle Shots:** Shows the product being used by a person in a real-world setting.</li>
+                        <li>**Detail Shots:** Close-ups of textures, material, or unique features.</li>
+                        <li>**Dimensions/Scale:** An image showing the product next to a ruler or object for size context.</li>
+                    </ul>
+                </div>
+
+                <button class="toggle-header" data-toggle="video-media">Video and 3D Media <span class="icon">▼</span></button>
+                <div class="toggle-body" id="video-media">
+                    <p>Video increases conversion rates significantly. Use short clips (15-30 seconds) demonstrating the product's functionality, or a short "unboxing" experience.</p>
+                </div>
+
+                <button class="toggle-header" data-toggle="pricing-strategy">Setting the Right Price <span class="icon">▼</span></button>
+                <div class="toggle-body" id="pricing-strategy">
+                    <p>Your price must cover three things:</p>
+                    <ol>
+                        <li>**Cost of Goods Sold (COGS):** What it costs to acquire or produce the item.</li>
+                        <li>**Overhead/Operational Costs:** Platform fees, shipping labor, returns, etc.</li>
+                        <li>**Desired Profit Margin:** The amount you want to keep.</li>
+                    </ol>
+                    <div class="highlight-box">
+                        <strong>Psychology Tip:</strong> Prices ending in 9 (e.g., $19.99) often perform better than round numbers ($20.00) due to the "left-digit effect."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Managing Stock Levels and Automating Inventory -->
+        <section id="inventory" class="content-section">
+            <h2>📊 3. Inventory and Stock Management</h2>
+            <p>Efficient inventory management prevents stockouts (losing sales) and overstocking (tying up capital). [Image of inventory management system dashboard]</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="stock-levels">Tracking Stock Levels <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="stock-levels">
+                    <p>Each product listing must have its quantity accurately recorded. Pay attention to:</p>
+                    <ul>
+                        <li>**SKU (Stock Keeping Unit):** A unique identifier you create for each product variant (e.g., TSHIRT-RED-L).</li>
+                        <li>**Barcode/ISBN (External ID):** Standard identifiers used for retail/shipping.</li>
+                        <li>**Low Stock Thresholds:** Set an alert to reorder when stock hits a certain level (e.g., when 20 units remain).</li>
+                    </ul>
+                </div>
+
+                <button class="toggle-header" data-toggle="automation">Automating Inventory and Fulfillment <span class="icon">▼</span></button>
+                <div class="toggle-body" id="automation">
+                    <p>Automation tools speed up order processing and reduce manual errors:</p>
+                    <ul>
+                        <li>**Integrate with Suppliers:** If dropshipping, automation ensures your store's inventory matches the supplier's in real-time.</li>
+                        <li>**WMS/3PL Integration:** Connecting your store to a Warehouse Management System or a Third-Party Logistics provider automates order routing and shipping tracking.</li>
+                        <li>**Synchronization:** If you sell on multiple channels (e.g., your website and Amazon), an inventory management tool ensures sales on one platform are immediately deducted from the total stock available on the other.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Interactive Activity (Quiz) -->
+        <section id="activity" class="content-section">
+            <h2>🧠 Interactive Quiz: Listing & Inventory Application</h2>
+            <p>Test your knowledge on optimizing your product listings and operations.</p>
+            <form id="quiz-form">
+                <!-- Question 1: Product Descriptions -->
+                <div class="quiz-question">
+                    <p>1. A description for a noise-canceling headphone focuses heavily on the '10-hour battery life' feature. How should this feature be reframed to be more benefit-driven?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="A" id="q1a"><label for="q1a"> A. Mention the charging cable included.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="B" id="q1b"><label for="q1b"> B. State that you can listen through an entire international flight without recharging.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="C" id="q1c"><label for="q1c"> C. Compare it to a competitor's 8-hour battery.</label>
+                    </div>
+                </div>
+
+                <!-- Question 2: Pricing/Listing -->
+                <div class="quiz-question">
+                    <p>2. You have a detailed, high-resolution photo of your product's material texture. What type of image is this considered?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="A" id="q2a"><label for="q2a"> A. Lifestyle Shot</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="B" id="q2b"><label for="q2b"> B. Product Shot</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="C" id="q2c"><label for="q2c"> C. Detail Shot</label>
+                    </div>
+                </div>
+
+                <!-- Question 3: Inventory Management -->
+                <div class="quiz-question">
+                    <p>3. A sale on your website increases stock levels from 50 to 0 instantly. What key inventory automation feature is most important to ensure this product doesn't appear as "In Stock" on your other selling channels?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="A" id="q3a"><label for="q3a"> A. Setting a Low Stock Threshold</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="B" id="q3b"><label for="q3b"> B. Synchronization (Multi-Channel)</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="C" id="q3c"><label for="q3c"> C. Using a unique SKU</label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-quiz">Submit Answers</button>
+            </form>
+            <div id="quiz-result"></div>
+        </section>
+    </main>
+
+    <script>
+        // JavaScript for Interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Section Navigation Logic (Tabs) ---
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+
+                    // Deactivate all buttons and content sections
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    contentSections.forEach(section => section.classList.remove('active'));
+
+                    // Activate the clicked button
+                    button.classList.add('active');
+
+                    // Show the corresponding content section
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        // Scroll smoothly to the content area
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // --- 2. Toggle/Accordion Logic ---
+            const toggleHeaders = document.querySelectorAll('.toggle-header');
+
+            toggleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const bodyId = header.getAttribute('data-toggle');
+                    const targetBody = document.getElementById(bodyId);
+
+                    if (targetBody) {
+                        const isCurrentlyActive = header.classList.contains('active');
+                        const container = header.closest('.toggle-container');
+
+                        // Close all toggles in the same container
+                        container.querySelectorAll('.toggle-header').forEach(h => h.classList.remove('active'));
+                        container.querySelectorAll('.toggle-body').forEach(b => {
+                            b.classList.remove('active');
+                            b.style.maxHeight = null;
+                            b.style.padding = '0 15px'; // Reset padding when closing
+                        });
+
+                        // If it was not active, open it
+                        if (!isCurrentlyActive) {
+                            header.classList.add('active');
+                            targetBody.classList.add('active');
+                            targetBody.style.padding = '15px'; // Set padding when opening
+                            // Set max-height for CSS transition
+                            targetBody.style.maxHeight = targetBody.scrollHeight + "px";
+                        }
+                    }
+                });
+            });
+
+            // Initialize: Set the initial max-height for the first active toggle body
+            const initialActiveBody = document.querySelector('.toggle-body.active');
+            if (initialActiveBody) {
+                initialActiveBody.style.maxHeight = initialActiveBody.scrollHeight + "px";
+                initialActiveBody.style.padding = '15px';
+            }
+            
+            // --- 3. Quiz Activity Logic ---
+            const quizForm = document.getElementById('quiz-form');
+            const quizResult = document.getElementById('quiz-result');
+            const correctAnswers = {
+                q1: 'B', // Benefit is the tangible gain (listening through the flight)
+                q2: 'C', // Detail Shot focuses on textures, close-ups, and materials
+                q3: 'B'  // Synchronization updates stock across multiple channels instantly
+            };
+
+            quizForm.addEventListener('submit', function(event) {
+                event.preventDefault(); 
+                
+                let score = 0;
+                let totalQuestions = 0;
+                let feedbackHTML = '<p><strong>Quiz Feedback:</strong></p><ul>';
+
+                for (const q in correctAnswers) {
+                    totalQuestions++;
+                    // Find the selected radio button value
+                    const selectedOption = quizForm.elements[q].value;
+                    const isCorrect = selectedOption === correctAnswers[q];
+                    const questionNumber = q.substring(1);
+                    
+                    // Highlight the question box based on the result
+                    const questionBox = document.querySelector(`.quiz-question:nth-child(${questionNumber})`);
+                    
+                    if (isCorrect) {
+                        score++;
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:var(--secondary-color);">Correct!</span></li>`;
+                        questionBox.style.borderColor = '#c3e6cb';
+                        questionBox.style.backgroundColor = '#d4edda20';
+                    } else {
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:#dc3545;">Incorrect.</span> Check the lesson sections for review!</li>`;
+                        questionBox.style.borderColor = '#f5c6cb';
+                        questionBox.style.backgroundColor = '#f8d7da20';
+                    }
+                }
+                
+                const percentage = (score / totalQuestions) * 100;
+                let introMessage = '';
+                
+                if (score === totalQuestions) {
+                    introMessage = '🎉 Fantastic! Your listings and inventory are ready for prime time.';
+                } else if (score > totalQuestions / 2) {
+                    introMessage = '👍 Good job! You understand the key operational aspects.';
+                } else {
+                    introMessage = '🧐 Review the sections again! Focus on the difference between features and benefits.';
+                }
+
+                quizResult.innerHTML = `
+                    <p>${introMessage}</p>
+                    <p>You scored <strong>${score} out of ${totalQuestions}</strong> (${percentage.toFixed(0)}%).</p>
+                    ${feedbackHTML}
+                    </ul>
+                `;
+
+                // Apply overall result styling
+                quizResult.style.display = 'block';
+                quizResult.className = (score >= totalQuestions / 2) ? 'correct' : 'incorrect';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LU06</title>
+    <style>
+        /* CSS Styling - Updated for Payment/Shipping Theme */
+        :root {
+            --primary-color: #009688; /* Teal/Green for Trust & Finance */
+            --secondary-color: #ffc107; /* Amber Accent for Warnings/Highlights */
+            --text-color: #343a40;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+            --radius: 8px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0 0 5px 0;
+            font-size: 2.2em;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        /* Navigation Styling */
+        #lesson-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px auto;
+        }
+
+        .nav-btn {
+            background: #e9ecef;
+            color: var(--text-color);
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            border-radius: var(--radius);
+            font-weight: 600;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Section Styling */
+        .content-section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+        }
+
+        .content-section.active {
+            display: block; /* Shown when active */
+        }
+
+        /* Toggle/Accordion Styling */
+        .toggle-container {
+            border: 1px solid #dee2e6;
+            border-radius: var(--radius);
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .toggle-header {
+            width: 100%;
+            text-align: left;
+            background: #f0f4f8;
+            color: var(--text-color);
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-container .toggle-header:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-header:hover {
+            background: #e3e8ed;
+        }
+
+        .toggle-header.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .toggle-header span.icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .toggle-header.active span.icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-body {
+            background: #fff;
+            padding: 0 15px;
+            margin: 0;
+            overflow: hidden;
+            max-height: 0; /* Hidden by default for smooth transition */
+            transition: max-height 0.4s ease-in-out;
+        }
+        
+        .toggle-body p, .toggle-body ul, .toggle-body ol {
+            padding-top: 10px;
+        }
+
+        .toggle-body.active {
+            padding: 15px;
+        }
+
+        /* Highlight box for key steps */
+        .highlight-box {
+            background: #fff8e1; /* Light yellow from secondary color */
+            border: 1px solid var(--secondary-color);
+            border-left: 5px solid var(--secondary-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        /* Quiz Activity Styling */
+        #quiz-form {
+            background: #e0f2f1; /* Light teal tint */
+            padding: 20px;
+            border: 1px solid #80cbc4;
+            border-radius: var(--radius);
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #b2dfdb;
+            background: #fff;
+            border-radius: 5px;
+        }
+
+        .quiz-question p {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .quiz-option {
+            margin: 8px 0;
+        }
+        .quiz-option label {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        #quiz-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        button#submit-quiz {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(255, 193, 7, 0.4);
+        }
+
+        button#submit-quiz:hover {
+            background-color: #ffb300;
+        }
+        button#submit-quiz:active {
+            transform: translateY(1px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            main {
+                padding: 0 10px;
+            }
+            #lesson-nav {
+                flex-direction: column;
+            }
+            .nav-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LU06:Payment and Shipping Set-up</h1>
+        <p>Establishing reliable transactions and clear customer expectations.</p>
+    </header>
+
+    <main>
+        <nav id="lesson-nav">
+            <button class="nav-btn active" data-target="payments">1. Payment Gateways</button>
+            <button class="nav-btn" data-target="shipping">2. Shipping Options & Policies</button>
+            <button class="nav-btn" data-target="returns">3. Returns & Customer Support</button>
+            <button class="nav-btn" data-target="activity">Activity: Quiz</button>
+        </nav>
+
+        <!-- Section 1: Payment Gateways -->
+        <section id="payments" class="content-section active">
+            <h2>💰 1. Securing Transactions with Payment Gateways</h2>
+            <p>A payment gateway processes credit card details securely. You must choose a reliable provider to earn customer trust.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="gateway-types">Types of Gateways <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="gateway-types">
+                    <p><strong>Platform-Based (e.g., Shopify Payments, Stripe):</strong> Easiest setup. The platform handles most compliance and security. Recommended for beginners.</p>
+                    <p><strong>Third-Party Gateways (e.g., PayPal, Square):</strong> Offer flexibility and trust but may involve slightly higher transaction fees or redirect customers off your site briefly during checkout.</p>
+                    <p><strong>Manual/Alternative:</strong> Bank transfers or Cash on Delivery (COD). Use sparingly as they increase friction and fraud risk.</p>
+                </div>
+
+                <button class="toggle-header" data-toggle="security-compliance">Security and PCI Compliance <span class="icon">▼</span></button>
+                <div class="toggle-body" id="security-compliance">
+                    <p>When handling payment data, security is paramount. The industry standard is **PCI Data Security Standard (PCI DSS)**.</p>
+                    <div class="highlight-box">
+                        <strong>Crucial:</strong> Use SSL (HTTPS) on your entire website and ensure your chosen gateway is PCI compliant. If a customer's card data never touches your server (standard for hosted platforms), your compliance burden is minimal.
+                    </div>
+                    <p>  </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Shipping Options and Policies -->
+        <section id="shipping" class="content-section">
+            <h2>📦 2. Defining Shipping Options and Policies</h2>
+            <p>Shipping is a primary source of cart abandonment. Clear, transparent, and fair policies are non-negotiable.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="shipping-rates">Shipping Rate Calculation <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="shipping-rates">
+                    <p>You need to choose a method for charging customers:</p>
+                    <ol>
+                        <li>**Flat Rate:** A single price for shipping, regardless of order size. Simple, but can be inaccurate for heavy items.</li>
+                        <li>**Free Shipping:** Absorbing shipping cost into the product price. Great for marketing, often triggered by a minimum order value.</li>
+                        <li>**Carrier Calculated Rates:** Integrating with services (USPS, FedEx) to pull real-time costs based on package weight, size, and destination zip code. Highly accurate but requires precise product weights.</li>
+                    </ol>
+                </div>
+
+                <button class="toggle-header" data-toggle="shipping-zones">Setting Up Shipping Zones <span class="icon">▼</span></button>
+                <div class="toggle-body" id="shipping-zones">
+                    <p>Shipping zones define the geographic regions you ship to (e.g., Local, National, International). Rates are set per zone.</p>
+                    <div class="highlight-box">
+                        <strong>Tip:</strong> Always include estimated *processing time* (e.g., 1-2 days to pack the order) separate from *transit time* (e.g., 3-5 days delivery).
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Handling Returns and Customer Support -->
+        <section id="returns" class="content-section">
+            <h2>🤝 3. Returns and Customer Support</h2>
+            <p>A good returns policy builds trust and reduces anxiety for first-time buyers.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="returns-policy">The Essential Return Policy <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="returns-policy">
+                    <p>Your policy must clearly state:</p>
+                    <ul>
+                        <li>**Return Window:** How many days the customer has to return the item (e.g., 30 days from delivery).</li>
+                        <li>**Condition:** Must the item be unworn, unopened, or in its original packaging?</li>
+                        <li>**Refund Method:** Store credit, exchange, or original payment refund?</li>
+                        <li>**Cost:** Who pays for return shipping (usually the customer, unless the item was damaged/faulty)?</li>
+                    </ul>
+                </div>
+
+                <button class="toggle-header" data-toggle="customer-support-sla">Customer Support Channels and SLAs <span class="icon">▼</span></button>
+                <div class="toggle-body" id="customer-support-sla">
+                    <p>Define your communication channels and your commitment to response times (Service Level Agreement or SLA).</p>
+                    <p><strong>Channels:</strong> Email (required), Live Chat (high conversion), Phone (optional, high cost).</p>
+                    <div class="highlight-box">
+                        <strong>SLA Example:</strong> "We respond to all email inquiries within 24 business hours." Communicate this promise clearly on your contact page.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Interactive Activity (Quiz) -->
+        <section id="activity" class="content-section">
+            <h2>🧠 Interactive Quiz: Payments & Shipping Application</h2>
+            <p>Test your knowledge on setting up reliable store operations.</p>
+            <form id="quiz-form">
+                <!-- Question 1: Payment Security -->
+                <div class="quiz-question">
+                    <p>1. If your store uses a third-party gateway (like PayPal) and never stores credit card data itself, which standard dictates the overall security requirements for handling payments?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="A" id="q1a"><label for="q1a"> A. SSL Encryption</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="B" id="q1b"><label for="q1b"> B. PCI DSS</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="C" id="q1c"><label for="q1c"> C. 30-Day Return Window</label>
+                    </div>
+                </div>
+
+                <!-- Question 2: Shipping Rates -->
+                <div class="quiz-question">
+                    <p>2. You are selling customized luxury watches. Accuracy is key, as shipping costs vary wildly based on destination and insurance value. Which shipping rate calculation method is best?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="A" id="q2a"><label for="q2a"> A. Flat Rate</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="B" id="q2b"><label for="q2b"> B. Free Shipping</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="C" id="q2c"><label for="q2c"> C. Carrier Calculated Rates</label>
+                    </div>
+                </div>
+
+                <!-- Question 3: Returns Policy -->
+                <div class="quiz-question">
+                    <p>3. What is the difference between "processing time" and "transit time" in a shipping policy?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="A" id="q3a"><label for="q3a"> A. Processing time is only for international orders.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="B" id="q3b"><label for="q3b"> B. Processing is the time to prepare the order; transit is the time it spends with the carrier.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="C" id="q3c"><label for="q3c"> C. They are interchangeable terms for the total time until delivery.</label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-quiz">Submit Answers</button>
+            </form>
+            <div id="quiz-result"></div>
+        </section>
+    </main>
+
+    <script>
+        // JavaScript for Interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Section Navigation Logic (Tabs) ---
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+
+                    // Deactivate all buttons and content sections
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    contentSections.forEach(section => section.classList.remove('active'));
+
+                    // Activate the clicked button
+                    button.classList.add('active');
+
+                    // Show the corresponding content section
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        // Scroll smoothly to the content area
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // --- 2. Toggle/Accordion Logic ---
+            const toggleHeaders = document.querySelectorAll('.toggle-header');
+
+            toggleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const bodyId = header.getAttribute('data-toggle');
+                    const targetBody = document.getElementById(bodyId);
+
+                    if (targetBody) {
+                        const isCurrentlyActive = header.classList.contains('active');
+                        const container = header.closest('.toggle-container');
+
+                        // Close all toggles in the same container
+                        container.querySelectorAll('.toggle-header').forEach(h => h.classList.remove('active'));
+                        container.querySelectorAll('.toggle-body').forEach(b => {
+                            b.classList.remove('active');
+                            b.style.maxHeight = null;
+                            b.style.padding = '0 15px'; // Reset padding when closing
+                        });
+
+                        // If it was not active, open it
+                        if (!isCurrentlyActive) {
+                            header.classList.add('active');
+                            targetBody.classList.add('active');
+                            targetBody.style.padding = '15px'; // Set padding when opening
+                            // Set max-height for CSS transition
+                            targetBody.style.maxHeight = targetBody.scrollHeight + "px";
+                        }
+                    }
+                });
+            });
+
+            // Initialize: Set the initial max-height for the first active toggle body
+            const initialActiveBody = document.querySelector('.toggle-body.active');
+            if (initialActiveBody) {
+                initialActiveBody.style.maxHeight = initialActiveBody.scrollHeight + "px";
+                initialActiveBody.style.padding = '15px';
+            }
+            
+            // --- 3. Quiz Activity Logic ---
+            const quizForm = document.getElementById('quiz-form');
+            const quizResult = document.getElementById('quiz-result');
+            const correctAnswers = {
+                q1: 'B', // PCI DSS is the data security standard
+                q2: 'C', // Carrier Calculated Rates for accuracy in high-value, varied shipments
+                q3: 'B'  // The definition of processing vs. transit time
+            };
+
+            quizForm.addEventListener('submit', function(event) {
+                event.preventDefault(); 
+                
+                let score = 0;
+                let totalQuestions = 0;
+                let feedbackHTML = '<p><strong>Quiz Feedback:</strong></p><ul>';
+
+                for (const q in correctAnswers) {
+                    totalQuestions++;
+                    // Find the selected radio button value
+                    const selectedOption = quizForm.elements[q].value;
+                    const isCorrect = selectedOption === correctAnswers[q];
+                    const questionNumber = q.substring(1);
+                    
+                    // Highlight the question box based on the result
+                    const questionBox = document.querySelector(`.quiz-question:nth-child(${questionNumber})`);
+                    
+                    if (isCorrect) {
+                        score++;
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:var(--primary-color);">Correct!</span></li>`;
+                        questionBox.style.borderColor = '#c3e6cb';
+                        questionBox.style.backgroundColor = '#d4edda20';
+                    } else {
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:#dc3545;">Incorrect.</span> Check the lesson sections for review!</li>`;
+                        questionBox.style.borderColor = '#f5c6cb';
+                        questionBox.style.backgroundColor = '#f8d7da20';
+                    }
+                }
+                
+                const percentage = (score / totalQuestions) * 100;
+                let introMessage = '';
+                
+                if (score === totalQuestions) {
+                    introMessage = '🎉 Superb! Your operational setup is robust and professional.';
+                } else if (score > totalQuestions / 2) {
+                    introMessage = '👍 Good job! You understand the key concepts for logistics.';
+                } else {
+                    introMessage = '🧐 Review the sections again! Focus on the security standards and shipping rate types.';
+                }
+
+                quizResult.innerHTML = `
+                    <p>${introMessage}</p>
+                    <p>You scored <strong>${score} out of ${totalQuestions}</strong> (${percentage.toFixed(0)}%).</p>
+                    ${feedbackHTML}
+                    </ul>
+                `;
+
+                // Apply overall result styling
+                quizResult.style.display = 'block';
+                quizResult.className = (score >= totalQuestions / 2) ? 'correct' : 'incorrect';
+            });
+        });
+    </script>
+</body>
+</html>

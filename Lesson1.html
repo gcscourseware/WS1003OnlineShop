@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LU01</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #3498db;
+            margin-top: 25px;
+        }
+
+        /* Tabs Styling */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            background-color: #ecf0f1;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+
+        .tab-button:hover {
+            background-color: #bdc3c7;
+        }
+
+        .tab-button.active {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Content Styling */
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #ffffff;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Activity/Quiz Styling */
+        .activity-box {
+            background-color: #e8f7ff;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        .activity-box button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+
+        .activity-box button:hover {
+            background-color: #27ae60;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .correct {
+            color: #2ecc71;
+        }
+
+        .incorrect {
+            color: #e74c3c;
+        }
+
+        /* Types Section Cards */
+        .type-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .type-card:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .details-content {
+            display: none;
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 3px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .note {
+            text-align: center;
+            margin-top: 15px;
+            color: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LU01:Introduction to E-commerce</h1>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'what-is')">1. What is E-commerce?</button>
+            <button class="tab-button" onclick="openTab(event, 'types')">2. Different Types</button>
+            <button class="tab-button" onclick="openTab(event, 'trends')">3. Trends & Future</button>
+        </div>
+
+        <div id="what-is" class="tab-content active">
+            <h2>What is E-commerce? 🤔</h2>
+            <p><strong>E-commerce</strong>, short for electronic commerce, refers to the buying and selling of goods or services using the internet, and the transfer of money and data to execute these transactions.</p>
+            <p>It covers a wide range of activities, from ordering a book on an online store to downloading digital music to using online banking services.</p>
+            
+            <div class="activity-box">
+                <h3>Quick Check!</h3>
+                <p>Which of these is <strong>NOT</strong> a common e-commerce activity?</p>
+                <input type="radio" name="what-is-quiz" value="A" id="q1a"> <label for="q1a">A. Shopping on Amazon</label><br>
+                <input type="radio" name="what-is-quiz" value="B" id="q1b"> <label for="q1b">B. Downloading a game from an app store</label><br>
+                <input type="radio" name="what-is-quiz" value="C" id="q1c"> <label for="q1c">C. Buying groceries at a physical supermarket</label><br>
+                <button onclick="checkQuiz('what-is-quiz', 'C', 'what-is-result')">Submit Answer</button>
+                <p id="what-is-result" class="feedback"></p>
+            </div>
+        </div>
+
+        <div id="types" class="tab-content">
+            <h2>Different Types of E-commerce 📊</h2>
+            <p>E-commerce is generally categorized by the parties involved in the transaction:</p>
+
+            <div class="type-card" onclick="toggleDetails('b2b-details')">
+                <h3>B2B (Business-to-Business) 🏢</h3>
+                <p>Transactions between two or more businesses . Example: A manufacturer selling parts to a car company.</p>
+                <div id="b2b-details" class="details-content">
+                    <p><strong>Key characteristic:</strong> Large volume, often complex, recurring transactions.</p>
+                </div>
+            </div>
+
+            <div class="type-card" onclick="toggleDetails('b2c-details')">
+                <h3>B2C (Business-to-Consumer) 🛍️</h3>
+                <p>Transactions between a business and an individual consumer. Example: You buying a shirt from an online clothing store.</p>
+                <div id="b2c-details" class="details-content">
+                    <p><strong>Key characteristic:</strong> Focuses on customer acquisition, retention, and personalized experience.</p>
+                </div>
+            </div>
+
+            <div class="type-card" onclick="toggleDetails('c2c-details')">
+                <h3>C2C (Consumer-to-Consumer) 🤝</h3>
+                <p>Transactions between consumers via a third-party platform. *Example: Selling a used item on eBay or a similar marketplace.</p>
+                <div id="c2c-details" class="details-content">
+                    <p><strong>Key characteristic:</strong> The platform acts as a mediator, facilitating the sale but not owning the goods.</p>
+                </div>
+            </div>
+            
+            <p class="note">Click on the card to reveal more details!</p>
+        </div>
+
+        <div id="trends" class="tab-content">
+            <h2>Trends and Future of Online Selling 🚀</h2>
+            <p>E-commerce is constantly evolving. Here are some current trends shaping its future:</p>
+            
+            <ul>
+                <li><strong>Mobile Commerce (M-commerce):</strong> Shopping directly on smartphones and tablets.</li>
+                <li><strong>Personalization:</strong> Using AI to recommend products based on user history.</li>
+                <li><strong>Sustainability:</strong> Consumers prefer businesses with eco-friendly practices.</li>
+            </ul>
+
+            <div class="activity-box">
+                <h3>Predict the Future!</h3>
+                <p>What is one major predicted future trend?</p>
+                <button id="trend-reveal-btn" onclick="revealTrend()">Reveal a Key Trend</button>
+                <p id="trend-future" class="feedback"></p>
+            </div>
+
+            <p>Next Steps: Explore a career in E-commerce Management or Digital Marketing!</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Function to handle tab switching
+        function openTab(evt, tabName) {
+            // Declare all variables
+            let i, tabcontent, tabbuttons;
+
+            // Get all elements with class="tab-content" and hide them
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+
+            // Get all elements with class="tab-button" and remove the "active" class
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Function to handle the quick check quiz
+        function checkQuiz(quizName, correctAnswer, resultElementId) {
+            const radios = document.getElementsByName(quizName);
+            let userAnswer = null;
+            let result = document.getElementById(resultElementId);
+
+            // Find the selected answer
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    userAnswer = radios[i].value;
+                    break;
+                }
+            }
+
+            // Check and display result
+            if (userAnswer) {
+                if (userAnswer === correctAnswer) {
+                    result.innerHTML = "✅ Correct! Buying groceries at a physical supermarket is traditional commerce, not e-commerce.";
+                    result.className = "feedback correct";
+                } else {
+                    result.innerHTML = "❌ Incorrect. Try again! Remember, e-commerce involves the internet.";
+                    result.className = "feedback incorrect";
+                }
+            } else {
+                result.innerHTML = "Please select an answer.";
+                result.className = "feedback incorrect";
+            }
+        }
+
+        // Function to toggle details on type cards (B2B, B2C, C2C)
+        function toggleDetails(elementId) {
+            const details = document.getElementById(elementId);
+            if (details.style.display === "block") {
+                details.style.display = "none";
+            } else {
+                details.style.display = "block";
+            }
+        }
+
+        // Function to reveal the future trend
+        function revealTrend() {
+            const trendElement = document.getElementById('trend-future');
+            trendElement.innerHTML = "🔮 The rise of **Metaverse Shopping** and **Augmented Reality (AR)**, allowing customers to virtually 'try on' clothes or place furniture in their homes before buying.";
+            trendElement.className = "feedback correct";
+            document.getElementById('trend-reveal-btn').disabled = true;
+            document.getElementById('trend-reveal-btn').innerText = "Trend Revealed!";
+        }
+
+        // Initialize the lesson by setting the first tab to active on load
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Explicitly click the first button to activate the initial state
+            // This ensures the JS sets up the tabs correctly, even if the first one has the 'active' class in HTML
+            const firstTabButton = document.querySelector('.tab-button');
+            if(firstTabButton) {
+                firstTabButton.click();
+            }
+        });
+    </script>
+</body>
+</html>

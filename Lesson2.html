@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LU02</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* --- Navigation --- */
+        #lesson-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #007bff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #e0f0ff;
+        }
+
+        .nav-link.active {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* --- Sections --- */
+        .lesson-section {
+            background-color: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none; /* Hidden by default, shown by JS */
+        }
+
+        .lesson-section.active-section {
+            display: block;
+        }
+
+        .lesson-section h2 {
+            color: #007bff;
+            border-bottom: 2px solid #e0f0ff;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        /* --- Section 1: Tabs --- */
+        .tabs-container {
+            margin-top: 20px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .tab-button {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .tab-button:first-child {
+            border-top-left-radius: 5px;
+        }
+
+        .tab-button:last-child {
+            border-top-right-radius: 5px;
+        }
+
+        .tab-button.active {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 0 5px 5px 5px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content h3 {
+            margin-top: 0;
+            color: #28a745; /* Success color */
+        }
+
+        /* --- Section 2: Grid --- */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .platform-card {
+            background-color: #e9ecef;
+            border-left: 5px solid #ffc107; /* Warning color */
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .platform-card h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+
+        /* --- Section 3: Analysis --- */
+        .platform-analysis-container {
+            margin-top: 20px;
+        }
+
+        #platform-select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .analysis-card {
+            border: 1px solid #007bff;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #e0f0ff;
+            min-height: 150px; /* Ensure space for content */
+        }
+
+        .analysis-card h4 {
+            color: #007bff;
+            margin-top: 0;
+        }
+
+        .analysis-card ul {
+            padding-left: 20px;
+        }
+
+        .analysis-card li strong {
+            color: #28a745; /* Strengths */
+        }
+
+        .analysis-card li:nth-child(even) strong {
+            color: #dc3545; /* Weaknesses */
+        }
+        
+        .placeholder-text {
+            color: #6c757d;
+            font-style: italic;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #343a40;
+            color: white;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>LU02:Overview of Popular Online Selling Platforms</h1>
+    </header>
+
+    <main>
+        <nav id="lesson-nav">
+            <a href="#section-1" class="nav-link active">1. Platform vs. Independent E-commerce</a>
+            <a href="#section-2" class="nav-link">2. Popular Platforms Overview</a>
+            <a href="#section-3" class="nav-link">3. Platform Analysis (S&W)</a>
+        </nav>
+
+        <section id="section-1" class="lesson-section active-section">
+            <h2>1. Platform-Based vs. Independent E-commerce</h2>
+            <p>Choosing your e-commerce model is the first critical step. Use the tabs below to explore the differences.</p>
+
+            <div class="tabs-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="showTab('platform')">Platform-Based (e.g., Shopee, Amazon)</button>
+                    <button class="tab-button" onclick="showTab('independent')">Independent (e.g., Shopify, WooCommerce)</button>
+                </div>
+                
+                <div id="platform" class="tab-content active">
+                    <h3>Platform-Based E-commerce</h3>
+                    <ul>
+                        <li>What it is: Selling within a larger, established marketplace with pre-built traffic and infrastructure.</li>
+                        <li>Key Pro: Instant access to millions of potential customers.</li>
+                        <li>Key Con:Less control over branding and customer data;high competition.</li>
+                    </ul>
+                </div>
+                
+                <div id="independent" class="tab-content">
+                    <h3>Independent E-commerce (Self-Hosted)</h3>
+                    <ul>
+                        <li>What it is:Building your own dedicated online store with a custom domain.</li>
+                        <li>Key Pro:Full brand control, ownership of customer data, and high customization.</li>
+                        <li>Key Con:Requires driving your own traffic; higher initial setup and marketing effort.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-2" class="lesson-section">
+            <h2>2. Popular E-commerce Platforms Overview</h2>
+            <p>Explore some of the world's most popular platforms and their primary focus.</p>
+
+            <div class="platform-grid">
+                <div class="platform-card">
+                    <h3>Shopify</h3>
+                    <p>Primary Focus: Independent Store Building.Provides tools for merchants to create their own customizable online stores.</p>
+                </div>
+                <div class="platform-card">
+                    <h3>Amazon</h3>
+                    <p>Primary Focus: Massive Global Marketplace.Unmatched reach and logistics for a massive range of products.</p>
+                </div>
+                <div class="platform-card">
+                    <h3>Shopee & Lazada</h3>
+                    <p>Primary Focus: Southeast Asian Marketplace.Dominant in the SEA region, known for mobile-first shopping and promotions.</p>
+                </div>
+                <div class="platform-card">
+                    <h3>Etsy</h3>
+                    <p>Primary Focus: Unique/Handmade Goods.A niche marketplace for vintage, handmade, and craft supplies.</p>
+                </div>
+                <div class="platform-card">
+                    <h3>TikTok Shop</h3>
+                    <p>Primary Focus: Social Commerce/Live Selling.Integrates e-commerce directly into the social media experience.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-3" class="lesson-section">
+            <h2>3. Platform Analysis: Strengths & Weaknesses</h2>
+            <p>Select a platform from the dropdown menu to see a summary of its key advantages and disadvantages.</p>
+
+            <div class="platform-analysis-container">
+                <label for="platform-select">Choose a Platform:</label>
+                <select id="platform-select" onchange="displayPlatformAnalysis(this.value)">
+                    <option value="">-- Select a Platform --</option>
+                    <option value="Shopify">Shopify</option>
+                    <option value="Amazon">Amazon</option>
+                    <option value="Shopee">Shopee / Lazada (SEA)</option>
+                    <option value="Etsy">Etsy</option>
+                    <option value="TikTok Shop">TikTok Shop</option>
+                </select>
+                
+                <div id="analysis-output" class="analysis-card">
+                    <p class="placeholder-text">The analysis will appear here after you make a selection.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 E-commerce Platform Lesson</p>
+    </footer>
+
+    <script>
+        // --- Data for Section 3: Strengths and Weaknesses ---
+        const platformData = {
+            "Shopify": {
+                strengths: ["Full control over branding and customer data.", "Vast ecosystem of apps and extensions.", "Scalable for businesses of all sizes."],
+                weaknesses: ["Requires driving your own traffic (no built-in marketplace).", "Monthly subscription costs plus transaction fees.", "Higher setup effort than a marketplace platform."]
+            },
+            "Amazon": {
+                strengths: ["Massive global traffic and customer base.", "World-class logistics (FBA) and fulfillment.", "High level of customer trust and name recognition."],
+                weaknesses: ["High competition; hard to stand out.", "Strict rules and policies; account suspension risks.", "High fees and lack of control over customer data."],
+            },
+            "Shopee": {
+                strengths: ["Dominant marketplace in Southeast Asia (SEA).", "Strong mobile-first experience and engaging features (games, live streams).", "Lower barrier to entry for new sellers."],
+                weaknesses: ["Intense price competition and high commission rates in some categories.", "Logistics can be complex and platform-dependent.", "Focus on promotions can hurt brand perception."],
+            },
+            "Etsy": {
+                strengths: ["Dedicated niche audience for handmade, vintage, and creative goods.", "Lower selling fees compared to Amazon for some categories.", "Strong community focus and support."],
+                weaknesses: ["Niche limitation—not suitable for mass-produced products.", "High competition within the handmade space.", "Strict intellectual property and reselling policies."],
+            },
+            "TikTok Shop": {
+                strengths: ["Leverages the power of viral content and social media for immediate sales.", "Integrated payment and fulfillment within the app.", "Lower advertising costs (currently) than traditional platforms."],
+                weaknesses: ["Platform is very new and policies are evolving rapidly.", "Focus is heavily on video and live content—a steep learning curve.", "Customers may be looking for deals/entertainment, not necessarily high-value brand loyalty."],
+            }
+        };
+
+        // --- Function to switch between main lesson sections ---
+        function switchSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.lesson-section').forEach(section => {
+                section.classList.remove('active-section');
+            });
+
+            // Show the target section
+            document.getElementById(sectionId).classList.add('active-section');
+
+            // Update the navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + sectionId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // --- Function for Section 1: Tab Switching ---
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show the target tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Activate the corresponding button (based on the tabId)
+            document.querySelector(`.tab-buttons button[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        // --- Function for Section 3: Dynamic Analysis ---
+        function displayPlatformAnalysis(platformName) {
+            const outputDiv = document.getElementById('analysis-output');
+            
+            if (platformName === "") {
+                outputDiv.innerHTML = '<p class="placeholder-text">The analysis will appear here after you make a selection.</p>';
+                return;
+            }
+
+            const data = platformData[platformName];
+            if (!data) {
+                outputDiv.innerHTML = '<p class="placeholder-text">Data not found for this platform.</p>';
+                return;
+            }
+
+            // Build the HTML for the analysis card
+            let htmlContent = `<h4>Analysis: ${platformName}</h4>`;
+            
+            htmlContent += '<h5>✅ Strengths</h5><ul>';
+            data.strengths.forEach(s => {
+                htmlContent += `<li><strong>Strength:</strong> ${s}</li>`;
+            });
+            htmlContent += '</ul>';
+
+            htmlContent += '<h5>❌ Weaknesses</h5><ul>';
+            data.weaknesses.forEach(w => {
+                htmlContent += `<li><strong>Weakness:</strong> ${w}</li>`;
+            });
+            htmlContent += '</ul>';
+
+            outputDiv.innerHTML = htmlContent;
+        }
+
+        // --- Initial Setup (Run on page load) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set up navigation links to switch sections
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetSection = this.getAttribute('href').substring(1);
+                    switchSection(targetSection);
+                });
+            });
+
+            // Initialize the first section and the first tab
+            switchSection('section-1');
+            showTab('platform');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LU11</title>
+    <style>
+        /* CSS Styling - Theme for Growth and Expansion (Professional, Clean) */
+        :root {
+            --primary-color: #3f51b5; /* Indigo for stability and scale */
+            --secondary-color: #ff9800; /* Orange for expansion and urgency */
+            --text-color: #343a40;
+            --bg-color: #f4f6f9;
+            --card-bg: #fff;
+            --radius: 8px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0 0 5px 0;
+            font-size: 2.2em;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        /* Navigation Styling */
+        #lesson-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px auto;
+        }
+
+        .nav-btn {
+            background: #eef1f6;
+            color: var(--text-color);
+            border: 1px solid #dcdcdc;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            border-radius: var(--radius);
+            font-weight: 600;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Section Styling */
+        .content-section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+        }
+
+        .content-section.active {
+            display: block; /* Shown when active */
+        }
+
+        /* Toggle/Accordion Styling */
+        .toggle-container {
+            border: 1px solid #dee2e6;
+            border-radius: var(--radius);
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .toggle-header {
+            width: 100%;
+            text-align: left;
+            background: #e8eaf6; /* Lighter shade of primary color */
+            color: var(--text-color);
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-container .toggle-header:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-header:hover {
+            background: #c5cae9;
+        }
+
+        .toggle-header.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .toggle-header span.icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .toggle-header.active span.icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-body {
+            background: #fff;
+            padding: 0 15px;
+            margin: 0;
+            overflow: hidden;
+            max-height: 0; /* Hidden by default for smooth transition */
+            transition: max-height 0.4s ease-in-out;
+        }
+        
+        .toggle-body p, .toggle-body ul, .toggle-body ol {
+            padding-top: 10px;
+        }
+
+        .toggle-body.active {
+            padding: 15px;
+        }
+
+        /* Highlight box for key steps */
+        .highlight-box {
+            background: #fff3e0; /* Light orange from secondary color */
+            border: 1px solid var(--secondary-color);
+            border-left: 5px solid var(--secondary-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        /* Quiz Activity Styling */
+        #quiz-form {
+            background: #f7f9fd; /* Very light background */
+            padding: 20px;
+            border: 1px solid #d9e0e9;
+            border-radius: var(--radius);
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e7f1;
+            background: #fff;
+            border-radius: 5px;
+        }
+
+        .quiz-question p {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .quiz-option {
+            margin: 8px 0;
+        }
+        .quiz-option label {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        #quiz-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        button#submit-quiz {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(255, 152, 0, 0.4);
+        }
+
+        button#submit-quiz:hover {
+            background-color: #fb8c00;
+        }
+        button#submit-quiz:active {
+            transform: translateY(1px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            main {
+                padding: 0 10px;
+            }
+            #lesson-nav {
+                flex-direction: column;
+            }
+            .nav-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LU11:Scaling and Expanding Your Online Business</h1>
+        <p>Strategies for growth, efficiency, and global reach.</p>
+    </header>
+
+    <main>
+        <nav id="lesson-nav">
+            <button class="nav-btn active" data-target="multichannel">1. Multichannel Selling</button>
+            <button class="nav-btn" data-target="fulfillment">2. Dropshipping & Fulfillment</button>
+            <button class="nav-btn" data-target="international">3. International Expansion</button>
+            <button class="nav-btn" data-target="activity">Activity: Quiz</button>
+        </nav>
+
+        <!-- Section 1: Multichannel selling (selling on multiple platforms) -->
+        <section id="multichannel" class="content-section active">
+            <h2>🔗 1. Mastering Multichannel Selling</h2>
+            <p>Multichannel selling means leveraging multiple sales touchpoints—your website, social commerce, marketplaces (Amazon, Etsy), and physical stores—to reach a wider audience.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="benefits-risks">Benefits and Risks <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="benefits-risks">
+                    <p><strong>Benefits:</strong></p>
+                    <ul>
+                        <li><strong>Increased Visibility:</strong> You appear where customers are already shopping.</li>
+                        <li><strong>Diversified Income:</strong> Not reliant on a single platform's algorithm or policy changes.</li>
+                        <li><strong>Better Customer Data:</strong> Insights across different demographics and purchasing behaviors.</li>
+                    </ul>
+                    <p><strong>Risks:</strong></p>
+                    <ul>
+                        <li><strong>Inventory Sync Nightmares:</strong> Risk of overselling if stock isn't updated instantly across all channels.</li>
+                        <li><strong>Brand Consistency:</strong> Ensuring messaging and pricing are uniform everywhere.</li>
+                        <li><strong>Higher Fees:</strong> Marketplaces like Amazon or Etsy charge commission fees on sales.</li>
+                    </ul>
+                </div>
+
+                <button class="toggle-header" data-toggle="management-strategy">Inventory Management Strategy <span class="icon">▼</span></button>
+                <div class="toggle-body" id="management-strategy">
+                    <p>To avoid scaling issues, use a centralized platform or middleware:</p>
+                    <ol>
+                        <li><strong>Central Hub:</strong> Use an e-commerce platform (like Shopify Plus or BigCommerce) as your single source of truth for all inventory.</li>
+                        <li><strong>Integrations:</strong> Utilize connectors (e.g., SolidCommerce, Linnworks) to automatically push stock updates and pull orders from all marketplaces and social shops back to your central hub.</li>
+                        <li><strong>SKU Consistency:</strong> Every product must have a unique Stock Keeping Unit (SKU) that is identical across all channels.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Dropshipping and fulfillment services -->
+        <section id="fulfillment" class="content-section">
+            <h2>📦 2. Dropshipping and Fulfillment Services</h2>
+            <p>Scaling requires outsourcing the physical work of storing, picking, packing, and shipping products.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="dropshipping">Dropshipping: Pros and Cons <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="dropshipping">
+                    <p><strong>What is Dropshipping?</strong> You sell the product, and a third party (the supplier) ships it directly to the customer. You never touch the inventory.</p>
+                    <p><strong>Pros:</strong></p>
+                    <ul>
+                        <li>No upfront inventory costs.</li>
+                        <li>Easy to test new products quickly.</li>
+                        <li>Zero warehouse overhead.</li>
+                    </ul>
+                    <p><strong>Cons:</strong></p>
+                    <ul>
+                        <li>Lower profit margins.</li>
+                        <li>Less control over quality and shipping times.</li>
+                        <li>Complex returns process.</li>
+                    </ul>
+                    [Image of a dropshipping flow diagram showing the customer, retailer, and supplier]
+                </div>
+
+                <button class="toggle-header" data-toggle="3pl-fulfillment">Third-Party Logistics (3PL) Fulfillment <span class="icon">▼</span></button>
+                <div class="toggle-body" id="3pl-fulfillment">
+                    <p><strong>What is 3PL?</strong> You own the inventory, but you pay a fulfillment partner to store it and handle all aspects of order fulfillment when a sale is made.</p>
+                    <p><strong>Benefits of 3PL for Scaling:</strong></p>
+                    <ol>
+                        <li><strong>Faster Shipping:</strong> 3PLs often have multiple warehouse locations, allowing for 2-day or next-day shipping nationwide.</li>
+                        <li><strong>Reduced Labor Costs:</strong> You eliminate in-house hiring for warehousing and packing.</li>
+                        <li><strong>Integration:</strong> They integrate directly with your e-commerce platform and marketplaces.</li>
+                    </ol>
+                    <div class="highlight-box">
+                        <strong>Key Difference:</strong> Dropshipping removes inventory ownership risk; 3PL optimizes the logistics of inventory you already own.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Expanding to international markets -->
+        <section id="international" class="content-section">
+            <h2>🌍 3. Expanding to International Markets</h2>
+            <p>Taking your business global unlocks massive potential but requires careful planning for logistics and compliance.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="logistics">International Logistics and Shipping <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="logistics">
+                    <p>The biggest hurdle is duty and tax collection:</p>
+                    <ul>
+                        <li><strong>DDP vs. DDU:</strong> Decide if you will ship Delivery Duty Paid (DDP, you collect duties at checkout) or Delivery Duty Unpaid (DDU, customer pays duties upon delivery). DDP offers a better customer experience.</li>
+                        <li><strong>Localized Fulfillment:</strong> Use international 3PLs or Amazon's FBA network in target countries to lower shipping costs and transit times dramatically.</li>
+                        <li><strong>Documentation:</strong> You must accurately complete customs declaration forms (commercial invoices) for every international shipment.</li>
+                    </ul>
+                    
+                </div>
+
+                <button class="toggle-header" data-toggle="localization">Localization vs. Translation <span class="icon">▼</span></button>
+                <div class="toggle-body" id="localization">
+                    <p>Simply translating your website is not enough. You must localize:</p>
+                    <ol>
+                        <li><strong>Currency and Payments:</strong> Accept local currency and popular payment methods (e.g., iDEAL in the Netherlands, Alipay in China).</li>
+                        <li><strong>Cultural Sensitivity:</strong> Adjust product names, colors, and imagery to appeal to local tastes.</li>
+                        <li><strong>Legal Compliance:</strong> Adhere to local consumer protection laws (e.g., GDPR in Europe).</li>
+                        <li><strong>Customer Support:</strong> Offer support in the native language during local business hours.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Interactive Activity (Quiz) -->
+        <section id="activity" class="content-section">
+            <h2>🧠 Interactive Quiz: Scaling Strategy</h2>
+            <p>Test your knowledge on managing growth and expansion.</p>
+            <form id="quiz-form">
+                <!-- Question 1: Multichannel -->
+                <div class="quiz-question">
+                    <p>1. What is the biggest risk that a multichannel seller faces if they do not use a centralized inventory management system?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="A" id="q1a"><label for="q1a"> A. Higher marketing costs across all platforms.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="B" id="q1b"><label for="q1b"> B. Overselling due to inconsistent stock levels.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="C" id="q1c"><label for="q1c"> C. Difficulty in processing refunds quickly.</label>
+                    </div>
+                </div>
+
+                <!-- Question 2: Fulfillment -->
+                <div class="quiz-question">
+                    <p>2. A key advantage of using a Third-Party Logistics (3PL) provider over dropshipping is:</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="A" id="q2a"><label for="q2a"> A. The 3PL owns the inventory, reducing capital risk.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="B" id="q2b"><label for="q2b"> B. Complete removal of all shipping fees.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="C" id="q2c"><label for="q2c"> C. Increased control over branding, packaging, and shipping speed.</label>
+                    </div>
+                </div>
+
+                <!-- Question 3: International -->
+                <div class="quiz-question">
+                    <p>3. When expanding to international markets, which term describes the most customer-friendly shipping option, where the seller handles duties and taxes at checkout?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="A" id="q3a"><label for="q3a"> A. Delivery Duty Unpaid (DDU).</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="B" id="q3b"><label for="q3b"> B. Delivery Duty Paid (DDP).</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="C" id="q3c"><label for="q3c"> C. Free On Board (FOB).</label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-quiz">Submit Answers</button>
+            </form>
+            <div id="quiz-result"></div>
+        </section>
+    </main>
+
+    <script>
+        // JavaScript for Interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Section Navigation Logic (Tabs) ---
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+
+                    // Deactivate all buttons and content sections
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    contentSections.forEach(section => section.classList.remove('active'));
+
+                    // Activate the clicked button
+                    button.classList.add('active');
+
+                    // Show the corresponding content section
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        // Scroll smoothly to the content area
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // --- 2. Toggle/Accordion Logic ---
+            const toggleHeaders = document.querySelectorAll('.toggle-header');
+
+            toggleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const bodyId = header.getAttribute('data-toggle');
+                    const targetBody = document.getElementById(bodyId);
+
+                    if (targetBody) {
+                        const isCurrentlyActive = header.classList.contains('active');
+                        const container = header.closest('.toggle-container');
+
+                        // Close all toggles in the same container
+                        container.querySelectorAll('.toggle-header').forEach(h => h.classList.remove('active'));
+                        container.querySelectorAll('.toggle-body').forEach(b => {
+                            b.classList.remove('active');
+                            b.style.maxHeight = null;
+                            b.style.padding = '0 15px'; // Reset padding when closing
+                        });
+
+                        // If it was not active, open it
+                        if (!isCurrentlyActive) {
+                            header.classList.add('active');
+                            targetBody.classList.add('active');
+                            targetBody.style.padding = '15px'; // Set padding when opening
+                            // Set max-height for CSS transition
+                            targetBody.style.maxHeight = targetBody.scrollHeight + "px";
+                        }
+                    }
+                });
+            });
+
+            // Initialize: Set the initial max-height for the first active toggle body
+            const initialActiveBody = document.querySelector('.toggle-body.active');
+            if (initialActiveBody) {
+                initialActiveBody.style.maxHeight = initialActiveBody.scrollHeight + "px";
+                initialActiveBody.style.padding = '15px';
+            }
+            
+            // --- 3. Quiz Activity Logic ---
+            const quizForm = document.getElementById('quiz-form');
+            const quizResult = document.getElementById('quiz-result');
+            const correctAnswers = {
+                q1: 'B', // Multichannel requires unified inventory management to prevent overselling
+                q2: 'C', // 3PL gives you control over your owned inventory's logistics and branding
+                q3: 'B'  // DDP (Delivery Duty Paid) is the most customer-friendly international option
+            };
+
+            quizForm.addEventListener('submit', function(event) {
+                event.preventDefault(); 
+                
+                let score = 0;
+                let totalQuestions = 0;
+                let feedbackHTML = '<p><strong>Quiz Feedback:</strong></p><ul>';
+
+                for (const q in correctAnswers) {
+                    totalQuestions++;
+                    // Find the selected radio button value
+                    const selectedOption = quizForm.elements[q].value;
+                    const isCorrect = selectedOption === correctAnswers[q];
+                    const questionNumber = q.substring(1);
+                    
+                    // Highlight the question box based on the result
+                    const questionBox = document.querySelector(`.quiz-question:nth-child(${questionNumber})`);
+                    
+                    if (isCorrect) {
+                        score++;
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:#28a745;">Correct!</span></li>`;
+                        questionBox.style.borderColor = '#c3e6cb';
+                        questionBox.style.backgroundColor = '#d4edda20';
+                    } else {
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:#dc3545;">Incorrect.</span> Review the corresponding lesson section.</li>`;
+                        questionBox.style.borderColor = '#f5c6cb';
+                        questionBox.style.backgroundColor = '#f8d7da20';
+                    }
+                }
+                
+                const percentage = (score / totalQuestions) * 100;
+                let introMessage = '';
+                
+                if (score === totalQuestions) {
+                    introMessage = '🚀 Fantastic! You understand the key concepts for scaling your business globally.';
+                } else if (score > totalQuestions / 2) {
+                    introMessage = '👍 Great job! You grasp the fundamentals of expansion and logistics.';
+                } else {
+                    introMessage = '🧐 Review the differences between dropshipping and 3PL, and the international shipping terms.';
+                }
+
+                quizResult.innerHTML = `
+                    <p>${introMessage}</p>
+                    <p>You scored <strong>${score} out of ${totalQuestions}</strong> (${percentage.toFixed(0)}%).</p>
+                    ${feedbackHTML}
+                    </ul>
+                `;
+
+                // Apply overall result styling
+                quizResult.style.display = 'block';
+                quizResult.className = (score >= totalQuestions / 2) ? 'correct' : 'incorrect';
+            });
+        });
+    </script>
+</body>
+</html>

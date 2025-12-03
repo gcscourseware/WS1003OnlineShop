@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LU04</title>
+    <style>
+        /* CSS Styling - Retained for aesthetic consistency */
+        :root {
+            --primary-color: #007bff; /* Blue */
+            --secondary-color: #28a745; /* Green Accent */
+            --text-color: #343a40;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+            --radius: 8px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0 0 5px 0;
+            font-size: 2.2em;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        /* Navigation Styling */
+        #lesson-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px auto;
+        }
+
+        .nav-btn {
+            background: #e9ecef;
+            color: var(--text-color);
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            border-radius: var(--radius);
+            font-weight: 600;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Section Styling */
+        .content-section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+        }
+
+        .content-section.active {
+            display: block; /* Shown when active */
+        }
+
+        /* Toggle/Accordion Styling */
+        .toggle-container {
+            border: 1px solid #dee2e6;
+            border-radius: var(--radius);
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .toggle-header {
+            width: 100%;
+            text-align: left;
+            background: #f0f4f8;
+            color: var(--text-color);
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-container .toggle-header:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-header:hover {
+            background: #e3e8ed;
+        }
+
+        .toggle-header.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .toggle-header span.icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .toggle-header.active span.icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-body {
+            background: #fff;
+            padding: 0 15px;
+            margin: 0;
+            overflow: hidden;
+            max-height: 0; /* Hidden by default for smooth transition */
+            transition: max-height 0.4s ease-in-out;
+        }
+        
+        .toggle-body p, .toggle-body ul {
+            padding-top: 10px;
+        }
+
+        .toggle-body.active {
+            padding: 15px;
+        }
+
+        /* List Styling for Section 3 */
+        .settings-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .settings-list li {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-left: 5px solid var(--secondary-color);
+            border-radius: 4px;
+        }
+
+        /* Quiz Activity Styling */
+        #quiz-form {
+            background: #e6f7ff;
+            padding: 20px;
+            border: 1px solid #b3e0ff;
+            border-radius: var(--radius);
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #cce5ff;
+            background: #fff;
+            border-radius: 5px;
+        }
+
+        .quiz-question p {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .quiz-option {
+            margin: 8px 0;
+        }
+        .quiz-option label {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        #quiz-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        button#submit-quiz {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);
+        }
+
+        button#submit-quiz:hover {
+            background-color: #1e7e34;
+        }
+        button#submit-quiz:active {
+            transform: translateY(1px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            main {
+                padding: 0 10px;
+            }
+            #lesson-nav {
+                flex-direction: column;
+            }
+            .nav-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LU04:Setting Up an Online Store</h1>
+        <p>A guide to platform selection, branding, and dashboard configuration.</p>
+    </header>
+
+    <main>
+        <nav id="lesson-nav">
+            <button class="nav-btn active" data-target="platform">1. Platform Account</button>
+            <button class="nav-btn" data-target="branding">2. Domain & Branding</button>
+            <button class="nav-btn" data-target="dashboard">3. Dashboard & Settings</button>
+            <button class="nav-btn" data-target="activity">Activity: Quiz</button>
+        </nav>
+
+        <!-- Section 1: Creating an Account on Different Platforms -->
+        <section id="platform" class="content-section active">
+            <h2>💻 1. Choosing Your Foundation</h2>
+            <p>The first step is deciding *where* to build your store, followed by account creation.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="hosted-account">Hosted Platforms (Shopify, Wix, BigCommerce) <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="hosted-account">
+                    <p><strong>Account Creation:</strong> Extremely fast. Sign up with email, select a plan, and you instantly get a subdomain (e.g., <code>yourstorename.shopify.com</code>). You are immediately granted access to the dashboard.</p>
+                    <p><strong>Key Benefit:</strong> Zero technical setup. The platform handles security, hosting, and performance. You only worry about products and marketing.</p>
+                    <br>
+                    <a href="https://prezi.com/view/QS3HWvjV3GLSWtGe0cpY/?referral_token=NqG6cNlnB3FN">Click the link for the Steps in Setting A Shopify Account</a>
+                </div>
+
+                <button class="toggle-header" data-toggle="self-hosted-account">Self-Hosted Platforms (WooCommerce, Magento, PrestaShop) <span class="icon">▼</span></button>
+                <div class="toggle-body" id="self-hosted-account">
+                    <p><strong>Account Creation:</strong> More involved. Requires purchasing web hosting (e.g., Bluehost, SiteGround) first. You then install the e-commerce software (often via a one-click installer) onto your server.</p>
+                    <p><strong>Key Requirement:</strong> Basic familiarity with server environments and software installation processes.</p>
+                  
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Choosing a Domain Name and Store Branding -->
+        <section id="branding" class="content-section">
+            <h2>🎨 2. Domain Name and Branding Essentials</h2>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="domain-name">Choosing a Domain Name <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="domain-name">
+                    <p>Your domain is your online address. It should be memorable, short, and relevant.</p>
+                    <ul>
+                        <li>**Relevance:** Should reflect your brand or product niche.</li>
+                        <li>**Memorability:** Avoid excessive hyphens or numbers.</li>
+                        <li>**TLD (Top-Level Domain):** Prioritize <code>.com</code>. If unavailable, consider modern TLDs like <code>.store</code> or <code>.co</code>.</li>
+                    </ul>
+                    <p>The structure is important for trust and recognition. [Image of Domain name structure] </p>
+                    <br>
+                    <h2>Three ways to have custom domain name:</h2>
+                    <ul>
+                        <li><a href="https://youtu.be/f4f4Wp9Sjwc">Buy a domain name from godaddy.com</a></li>
+                        <li><a href="https://youtu.be/ojuU6l7XfDo">Changing the autogenerated subdomain from Shopify Settings</a></li>
+                        <li><a href="https://youtu.be/aY2oUcCsdak">Buy a domain name Within Shopify.com</a></li>
+                    </ul>
+                </div>
+
+                <button class="toggle-header" data-toggle="store-branding">Store Branding Checklist <span class="icon">▼</span></button>
+                <div class="toggle-body" id="store-branding">
+                    <p>Consistent branding builds trust and makes your store look professional.</p>
+                    <ul class="settings-list">
+                        <li>**Logo:** Simple, scalable, and instantly recognizable. Must work well on white and colored backgrounds.</li>
+                        <li>**Color Palette:** Typically 2-4 primary colors that reflect your brand's personality (e.g., green for sustainability, blue for trust).</li>
+                        <li>**Tone of Voice:** Defines how your product descriptions, policies, and customer emails sound (e.g., playful, authoritative, friendly).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Understanding Dashboard and Store Settings -->
+        <section id="dashboard" class="content-section">
+            <h2>⚙️ 3. Dashboard Navigation and Core Settings</h2>
+            <p>The dashboard is your store's command center. Understanding its layout is crucial for daily operations.</p>
+            <p> [Image of E-commerce Platform Dashboard] </p>
+            <h3>Key Store Settings Checklist:</h3>
+            <ul class="settings-list">
+                <li><strong>Payment Providers:</strong> Integrating gateways like PayPal, Stripe, or your platform's native payment solution. This must be done before launch.</li>
+                <li><strong>Shipping Rates & Zones:</strong> Defining where you ship (zones) and the calculated cost (flat rate, weight-based, or carrier calculated).</li>
+                <li><strong>Tax Settings:</strong> Configuring local, state, and national taxes (sales tax, VAT, etc.) for accurate checkout totals.</li>
+                <li><strong>Legal Pages:</strong> Creating essential pages (Refund Policy, Terms of Service, Privacy Policy).</li>
+                <li><strong>Notifications:</strong> Customizing automated emails sent to customers (Order Confirmation, Shipping Updates).</li>
+            </ul>
+        </section>
+
+        <!-- Section 4: Interactive Activity (Quiz) -->
+        <section id="activity" class="content-section">
+            <h2>🧠 Interactive Quiz: Setup Application</h2>
+            <p>Read each scenario and choose the best option based on the setup lesson.</p>
+            <form id="quiz-form">
+                <!-- Question 1: Platform Choice -->
+                <div class="quiz-question">
+                    <p>1. You are launching a store quickly and have no web development experience. Your priority is avoiding server maintenance and setup complexity. Which platform type should you choose?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="A" id="q1a"><label for="q1a"> A. Self-Hosted (WooCommerce)</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="B" id="q1b"><label for="q1b"> B. Hosted (Shopify)</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="C" id="q1c"><label for="q1c"> C. Custom-Built</label>
+                    </div>
+                </div>
+
+                <!-- Question 2: Domain/Branding -->
+                <div class="quiz-question">
+                    <p>2. Which of these is the most effective and professional domain name for a store selling eco-friendly clothing?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="A" id="q2a"><label for="q2a"> A. Eco-Clothes-Store-2024.net</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="B" id="q2b"><label for="q2b"> B. GreenThread.com</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="C" id="q2c"><label for="q2c"> C. TheBestSustainableApparel.biz</label>
+                    </div>
+                </div>
+
+                <!-- Question 3: Dashboard Settings -->
+                <div class="quiz-question">
+                    <p>3. Before accepting your first order, which setting must you configure to ensure you can receive funds from customer purchases?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="A" id="q3a"><label for="q3a"> A. Legal Pages (Terms of Service)</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="B" id="q3b"><label for="q3b"> B. Tax Settings</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="C" id="q3c"><label for="q3c"> C. Payment Providers</label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-quiz">Submit Answers</button>
+            </form>
+            <div id="quiz-result"></div>
+        </section>
+    </main>
+
+    <script>
+        // JavaScript for Interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Section Navigation Logic (Tabs) ---
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+
+                    // Deactivate all buttons and content sections
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    contentSections.forEach(section => section.classList.remove('active'));
+
+                    // Activate the clicked button
+                    button.classList.add('active');
+
+                    // Show the corresponding content section
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        // Scroll smoothly to the content area
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // --- 2. Toggle/Accordion Logic ---
+            const toggleHeaders = document.querySelectorAll('.toggle-header');
+
+            toggleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const bodyId = header.getAttribute('data-toggle');
+                    const targetBody = document.getElementById(bodyId);
+
+                    if (targetBody) {
+                        const isCurrentlyActive = header.classList.contains('active');
+                        const container = header.closest('.toggle-container');
+
+                        // Close all toggles in the same container
+                        container.querySelectorAll('.toggle-header').forEach(h => h.classList.remove('active'));
+                        container.querySelectorAll('.toggle-body').forEach(b => {
+                            b.classList.remove('active');
+                            b.style.maxHeight = null;
+                            b.style.padding = '0 15px'; // Reset padding when closing
+                        });
+
+                        // If it was not active, open it
+                        if (!isCurrentlyActive) {
+                            header.classList.add('active');
+                            targetBody.classList.add('active');
+                            targetBody.style.padding = '15px'; // Set padding when opening
+                            // Set max-height for CSS transition
+                            targetBody.style.maxHeight = targetBody.scrollHeight + "px";
+                        }
+                    }
+                });
+            });
+
+            // Initialize: Set the initial max-height for the first active toggle body
+            const initialActiveBody = document.querySelector('.toggle-body.active');
+            if (initialActiveBody) {
+                initialActiveBody.style.maxHeight = initialActiveBody.scrollHeight + "px";
+                initialActiveBody.style.padding = '15px';
+            }
+            
+            // --- 3. Quiz Activity Logic ---
+            const quizForm = document.getElementById('quiz-form');
+            const quizResult = document.getElementById('quiz-result');
+            const correctAnswers = {
+                q1: 'B', // Hosted (Shopify) -> Avoids server maintenance/setup complexity
+                q2: 'B', // GreenThread.com -> Short, relevant, professional TLD (.com)
+                q3: 'C'  // Payment Providers -> Essential for receiving money
+            };
+
+            quizForm.addEventListener('submit', function(event) {
+                event.preventDefault(); 
+                
+                let score = 0;
+                let totalQuestions = 0;
+                let feedbackHTML = '<p><strong>Quiz Feedback:</strong></p><ul>';
+
+                for (const q in correctAnswers) {
+                    totalQuestions++;
+                    // Find the selected radio button value
+                    const selectedOption = quizForm.elements[q].value;
+                    const isCorrect = selectedOption === correctAnswers[q];
+                    const questionNumber = q.substring(1);
+                    
+                    // Highlight the question box based on the result
+                    const questionBox = document.querySelector(`.quiz-question:nth-child(${questionNumber})`);
+                    
+                    if (isCorrect) {
+                        score++;
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:var(--secondary-color);">Correct!</span></li>`;
+                        questionBox.style.borderColor = '#c3e6cb';
+                        questionBox.style.backgroundColor = '#d4edda20';
+                    } else {
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:#dc3545;">Incorrect.</span> Check the lesson sections for review!</li>`;
+                        questionBox.style.borderColor = '#f5c6cb';
+                        questionBox.style.backgroundColor = '#f8d7da20';
+                    }
+                }
+                
+                const percentage = (score / totalQuestions) * 100;
+                let introMessage = '';
+                
+                if (score === totalQuestions) {
+                    introMessage = '🎉 Excellent! You are ready to start building.';
+                } else if (score > totalQuestions / 2) {
+                    introMessage = '👍 Good job! You understand the critical first steps.';
+                } else {
+                    introMessage = '🧐 Keep studying! Review the dashboard settings and domain rules.';
+                }
+
+                quizResult.innerHTML = `
+                    <p>${introMessage}</p>
+                    <p>You scored <strong>${score} out of ${totalQuestions}</strong> (${percentage.toFixed(0)}%).</p>
+                    ${feedbackHTML}
+                    </ul>
+                `;
+
+                // Apply overall result styling
+                quizResult.style.display = 'block';
+                quizResult.className = (score >= totalQuestions / 2) ? 'correct' : 'incorrect';
+            });
+        });
+    </script>
+</body>
+</html>

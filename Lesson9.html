@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LU09</title>
+    <style>
+        /* CSS Styling - Inherited Theme (Vibrant and engaging) */
+        :root {
+            --primary-color: #007BFF; /* Blue for Trust and Professionalism (Replacing Pink/Magenta) */
+            --secondary-color: #28a745; /* Green for Growth and Resolution */
+            --text-color: #343a40;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+            --radius: 8px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0 0 5px 0;
+            font-size: 2.2em;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        /* Navigation Styling */
+        #lesson-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px auto;
+        }
+
+        .nav-btn {
+            background: #e9ecef;
+            color: var(--text-color);
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            border-radius: var(--radius);
+            font-weight: 600;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Section Styling */
+        .content-section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+        }
+
+        .content-section.active {
+            display: block; /* Shown when active */
+        }
+
+        /* Toggle/Accordion Styling */
+        .toggle-container {
+            border: 1px solid #dee2e6;
+            border-radius: var(--radius);
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .toggle-header {
+            width: 100%;
+            text-align: left;
+            background: #f0f4f8;
+            color: var(--text-color);
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-container .toggle-header:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-header:hover {
+            background: #e3e8ed;
+        }
+
+        .toggle-header.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .toggle-header span.icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .toggle-header.active span.icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-body {
+            background: #fff;
+            padding: 0 15px;
+            margin: 0;
+            overflow: hidden;
+            max-height: 0; /* Hidden by default for smooth transition */
+            transition: max-height 0.4s ease-in-out;
+        }
+        
+        .toggle-body p, .toggle-body ul, .toggle-body ol {
+            padding-top: 10px;
+        }
+
+        .toggle-body.active {
+            padding: 15px;
+        }
+
+        /* Highlight box for key steps */
+        .highlight-box {
+            background: #e6f7ff; /* Light blue from primary color */
+            border: 1px solid var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        /* Quiz Activity Styling */
+        #quiz-form {
+            background: #f2f7ff; /* Light blue tint */
+            padding: 20px;
+            border: 1px solid #c9e0ff;
+            border-radius: var(--radius);
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0ecff;
+            background: #fff;
+            border-radius: 5px;
+        }
+
+        .quiz-question p {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .quiz-option {
+            margin: 8px 0;
+        }
+        .quiz-option label {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        #quiz-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        button#submit-quiz {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(40, 167, 69, 0.4);
+        }
+
+        button#submit-quiz:hover {
+            background-color: #1e7e34;
+        }
+        button#submit-quiz:active {
+            transform: translateY(1px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            main {
+                padding: 0 10px;
+            }
+            #lesson-nav {
+                flex-direction: column;
+            }
+            .nav-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LU09:Managing Customer Service and Engagement</h1>
+        <p>Turning inquiries into opportunities for loyalty and long-term relationships.</p>
+    </header>
+
+    <main>
+        <nav id="lesson-nav">
+            <button class="nav-btn active" data-target="inquiries">1. Handling Complaints</button>
+            <button class="nav-btn" data-target="chatbots">2. Automated Responses</button>
+            <button class="nav-btn" data-target="relationships">3. Building Loyalty</button>
+            <button class="nav-btn" data-target="activity">Activity: Quiz</button>
+        </nav>
+
+        <!-- Section 1: Handling inquiries and complaints professionally -->
+        <section id="inquiries" class="content-section active">
+            <h2>📞 1. Handling Inquiries and Complaints Professionally</h2>
+            <p>Every customer complaint is a chance to prove your commitment to quality and service. Poor handling can lead to permanent customer loss.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="complaint-process">The 4 A's of Resolution <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="complaint-process">
+                    <ol>
+                        <li><strong>Acknowledge:</strong> Immediately respond and validate their frustration. Use empathetic language (e.g., "I understand why you're upset").</li>
+                        <li><strong>Apologize:</strong> Take responsibility without blaming. An apology diffuses tension.</li>
+                        <li><strong>Analyze:</strong> Fully investigate the root cause of the issue (wrong item, shipping delay, product defect).</li>
+                        <li><strong>Act & Achieve:</strong> Offer a clear, satisfying resolution (refund, replacement, discount code) and follow up to ensure satisfaction.</li>
+                    </ol>
+                    <div class="highlight-box">
+                        <strong>Rule for Social Media:</strong> When a complaint is public, reply publicly to acknowledge the issue and then immediately move the conversation to private direct messages (DM) to resolve the specific details.
+                    </div>
+                </div>
+
+                <button class="toggle-header" data-toggle="professional-tone">Maintaining Professional Tone <span class="icon">▼</span></button>
+                <div class="toggle-body" id="professional-tone">
+                    <p>Always maintain a tone that is:</p>
+                    <ul>
+                        <li><strong>Calm:</strong> Never match the customer's frustration. Be the anchor.</li>
+                        <li><strong>Concise:</strong> Get to the solution quickly without unnecessary filler.</li>
+                        <li><strong>Personalized:</strong> Use their name and refer to their specific order or issue. Avoid generic copy-paste replies for serious issues.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Using chatbots and automated responses -->
+        <section id="chatbots" class="content-section">
+            <h2>🤖 2. Using Chatbots and Automated Responses</h2>
+            <p>Automation is key to scaling customer service, especially for high-volume inquiries on social platforms.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="chatbot-role">The Primary Role of Automation <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="chatbot-role">
+                    <p>The best use of chatbots is for **triage and FAQ**:</p>
+                    <ul>
+                        <li><strong>Instant Answers:</strong> Providing immediate answers to common questions (e.g., "What is your return policy?", "How long is shipping?").</li>
+                        <li><strong>24/7 Availability:</strong> Ensuring customers always get a reply, even outside business hours.</li>
+                        <li><strong>Pre-Qualification:</strong> Gathering essential information (order number, customer name, issue type) before handing off to a human agent.</li>
+                    </ul>
+                    
+                </div>
+
+                <button class="toggle-header" data-toggle="automation-best-practice">Best Practices for Chatbots <span class="icon">▼</span></button>
+                <div class="toggle-body" id="automation-best-practice">
+                    <p>To avoid frustrating customers:</p>
+                    <ol>
+                        <li><strong>Set Expectations:</strong> Clearly state at the start that the user is interacting with a bot.</li>
+                        <li><strong>Always Offer an Exit:</strong> Provide an easy path to "speak to a human" at any point in the conversation.</li>
+                        <li><strong>Keep it Simple:</strong> Design conversations to handle 3-5 of the most frequent inquiries, not complex, unique problems.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Building long-term customer relationships -->
+        <section id="relationships" class="content-section">
+            <h2>💖 3. Building Long-Term Customer Relationships</h2>
+            <p>Great service doesn't end with a closed ticket; it continues by nurturing a loyal customer base.</p>
+            <div class="toggle-container">
+                <button class="toggle-header active" data-toggle="loyalty-drivers">Key Drivers of Loyalty <span class="icon">▼</span></button>
+                <div class="toggle-body active" id="loyalty-drivers">
+                    <ul>
+                        <li><strong>The Delight Factor:</strong> Unexpected "wow" moments (e.g., a handwritten thank you note, free upgrade, or small surprise gift).</li>
+                        <li><strong>Active Listening:</strong> Monitoring social comments and DMs not just for complaints, but for feedback and product ideas.</li>
+                        <li><strong>Exclusivity:</strong> Giving early access or exclusive discounts to repeat buyers or followers, making them feel like part of an inner circle.</li>
+                    </ul>
+                    <p>Long-term relationships increase Customer Lifetime Value (CLV) significantly.</p>
+                </div>
+
+                <button class="toggle-header" data-toggle="feedback-loop">Creating a Feedback Loop <span class="icon">▼</span></button>
+                <div class="toggle-body" id="feedback-loop">
+                    <p>Use social platforms to continually improve your service and products:</p>
+                    <ol>
+                        <li><strong>Post-Service Survey:</strong> Send a quick DM asking for feedback after a support interaction.</li>
+                        <li><strong>User-Generated Content (UGC):</strong> Feature and celebrate customers who share photos/videos of your product. This builds community and social proof.</li>
+                        <li><strong>Host Q&A Sessions:</strong> Use Instagram/TikTok Live sessions to proactively answer common questions and dispel customer concerns.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Interactive Activity (Quiz) -->
+        <section id="activity" class="content-section">
+            <h2>🧠 Interactive Quiz: Customer Service Deep Dive</h2>
+            <p>Test your understanding of professional service and engagement strategies.</p>
+            <form id="quiz-form">
+                <!-- Question 1: Handling Inquiries -->
+                <div class="quiz-question">
+                    <p>1. When professionally resolving a public customer complaint on social media, what is the best immediate course of action?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="A" id="q1a"><label for="q1a"> A. Ignore the post until the issue is fully resolved internally.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="B" id="q1b"><label for="q1b"> B. Publicly acknowledge the complaint, then move the detailed resolution to a private DM.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q1" value="C" id="q1c"><label for="q1c"> C. Immediately offer a full refund publicly to silence the complaint.</label>
+                    </div>
+                </div>
+
+                <!-- Question 2: Automation -->
+                <div class="quiz-question">
+                    <p>2. What is the most critical best practice when implementing a customer service chatbot?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="A" id="q2a"><label for="q2a"> A. Program it to handle only complex, multi-step queries.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="B" id="q2b"><label for="q2b"> B. Ensure customers have a clear and easy option to escalate to a human agent.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q2" value="C" id="q2c"><label for="q2c"> C. Never disclose that the customer is talking to a bot.</label>
+                    </div>
+                </div>
+
+                <!-- Question 3: Relationships -->
+                <div class="quiz-question">
+                    <p>3. Building long-term loyalty often relies on the "Delight Factor." What is an example of the Delight Factor?</p>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="A" id="q3a"><label for="q3a"> A. Sending an automated "thank you for your purchase" email.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="B" id="q3b"><label for="q3b"> B. Promptly resolving a shipping issue.</label>
+                    </div>
+                    <div class="quiz-option">
+                        <input type="radio" name="q3" value="C" id="q3c"><label for="q3c"> C. Providing a free, unexpected upgrade or a personalized thank you note with the order.</label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-quiz">Submit Answers</button>
+            </form>
+            <div id="quiz-result"></div>
+        </section>
+    </main>
+
+    <script>
+        // JavaScript for Interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Section Navigation Logic (Tabs) ---
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+
+                    // Deactivate all buttons and content sections
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    contentSections.forEach(section => section.classList.remove('active'));
+
+                    // Activate the clicked button
+                    button.classList.add('active');
+
+                    // Show the corresponding content section
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        // Scroll smoothly to the content area
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // --- 2. Toggle/Accordion Logic ---
+            const toggleHeaders = document.querySelectorAll('.toggle-header');
+
+            toggleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const bodyId = header.getAttribute('data-toggle');
+                    const targetBody = document.getElementById(bodyId);
+
+                    if (targetBody) {
+                        const isCurrentlyActive = header.classList.contains('active');
+                        const container = header.closest('.toggle-container');
+
+                        // Close all toggles in the same container
+                        container.querySelectorAll('.toggle-header').forEach(h => h.classList.remove('active'));
+                        container.querySelectorAll('.toggle-body').forEach(b => {
+                            b.classList.remove('active');
+                            b.style.maxHeight = null;
+                            b.style.padding = '0 15px'; // Reset padding when closing
+                        });
+
+                        // If it was not active, open it
+                        if (!isCurrentlyActive) {
+                            header.classList.add('active');
+                            targetBody.classList.add('active');
+                            targetBody.style.padding = '15px'; // Set padding when opening
+                            // Set max-height for CSS transition
+                            targetBody.style.maxHeight = targetBody.scrollHeight + "px";
+                        }
+                    }
+                });
+            });
+
+            // Initialize: Set the initial max-height for the first active toggle body
+            const initialActiveBody = document.querySelector('.toggle-body.active');
+            if (initialActiveBody) {
+                initialActiveBody.style.maxHeight = initialActiveBody.scrollHeight + "px";
+                initialActiveBody.style.padding = '15px';
+            }
+            
+            // --- 3. Quiz Activity Logic ---
+            const quizForm = document.getElementById('quiz-form');
+            const quizResult = document.getElementById('quiz-result');
+            const correctAnswers = {
+                q1: 'B', // Acknowledge publicly, resolve privately
+                q2: 'B', // Always offer an exit to a human agent
+                q3: 'C'  // Delight Factor is an unexpected positive moment
+            };
+
+            quizForm.addEventListener('submit', function(event) {
+                event.preventDefault(); 
+                
+                let score = 0;
+                let totalQuestions = 0;
+                let feedbackHTML = '<p><strong>Quiz Feedback:</strong></p><ul>';
+
+                for (const q in correctAnswers) {
+                    totalQuestions++;
+                    // Find the selected radio button value
+                    const selectedOption = quizForm.elements[q].value;
+                    const isCorrect = selectedOption === correctAnswers[q];
+                    const questionNumber = q.substring(1);
+                    
+                    // Highlight the question box based on the result
+                    const questionBox = document.querySelector(`.quiz-question:nth-child(${questionNumber})`);
+                    
+                    if (isCorrect) {
+                        score++;
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:var(--secondary-color);">Correct!</span></li>`;
+                        questionBox.style.borderColor = '#c3e6cb';
+                        questionBox.style.backgroundColor = '#d4edda20';
+                    } else {
+                        feedbackHTML += `<li>Question ${questionNumber}: <span style="color:#dc3545;">Incorrect.</span> Review the corresponding lesson section.</li>`;
+                        questionBox.style.borderColor = '#f5c6cb';
+                        questionBox.style.backgroundColor = '#f8d7da20';
+                    }
+                }
+                
+                const percentage = (score / totalQuestions) * 100;
+                let introMessage = '';
+                
+                if (score === totalQuestions) {
+                    introMessage = '🎉 Excellent score! You are a customer service pro.';
+                } else if (score > totalQuestions / 2) {
+                    introMessage = '👍 Good job! You understand the importance of resolution and loyalty.';
+                } else {
+                    introMessage = '🧐 Take another look at how to handle public complaints and the role of human hand-off in automation.';
+                }
+
+                quizResult.innerHTML = `
+                    <p>${introMessage}</p>
+                    <p>You scored <strong>${score} out of ${totalQuestions}</strong> (${percentage.toFixed(0)}%).</p>
+                    ${feedbackHTML}
+                    </ul>
+                `;
+
+                // Apply overall result styling
+                quizResult.style.display = 'block';
+                quizResult.className = (score >= totalQuestions / 2) ? 'correct' : 'incorrect';
+            });
+        });
+    </script>
+</body>
+</html>
